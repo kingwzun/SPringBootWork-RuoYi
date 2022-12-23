@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dormitory.mapper.DormitoryStumanageMapper">
+    
+    <resultMap type="DormitoryStumanage" id="DormitoryStumanageResult">
+        <result property="sid"    column="sid"    />
+        <result property="stuNo"    column="stu_no"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="stuBedno"    column="stu_bedno"    />
+        <result property="stuGrade"    column="stu_grade"    />
+        <result property="stuClass"    column="stu_class"    />
+        <result property="stuTell"    column="stu_tell"    />
+        <result property="stuAddress"    column="stu_address"    />
+        <result property="stuAvatar"    column="stu_avatar"    />
+        <result property="stustatus"    column="stustatus"    />
+        <result property="dormitoryNum"    column="dormitory_num"    />
+        <result property="inDate"    column="in_date"    />
+        <result property="outDate"    column="out_date"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectDormitoryStumanageVo">
+        select sid, stu_no, stu_name, stu_bedno, stu_grade, stu_class, stu_tell, stu_address, stu_avatar, stustatus, dormitory_num, in_date, out_date, create_time, update_time, create_by, remark from dormitory_stumanage
+    </sql>
+
+    <select id="selectDormitoryStumanageList" parameterType="DormitoryStumanage" resultMap="DormitoryStumanageResult">
+        <include refid="selectDormitoryStumanageVo"/>
+        <where>  
+            <if test="stuNo != null "> and stu_no = #{stuNo}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="stuBedno != null "> and stu_bedno = #{stuBedno}</if>
+            <if test="stuGrade != null  and stuGrade != ''"> and stu_grade = #{stuGrade}</if>
+            <if test="stuClass != null  and stuClass != ''"> and stu_class = #{stuClass}</if>
+            <if test="stuTell != null  and stuTell != ''"> and stu_tell = #{stuTell}</if>
+            <if test="stuAddress != null  and stuAddress != ''"> and stu_address = #{stuAddress}</if>
+            <if test="stuAvatar != null  and stuAvatar != ''"> and stu_avatar = #{stuAvatar}</if>
+            <if test="stustatus != null "> and stustatus = #{stustatus}</if>
+            <if test="dormitoryNum != null "> and dormitory_num = #{dormitoryNum}</if>
+            <if test="inDate != null "> and in_date = #{inDate}</if>
+            <if test="outDate != null "> and out_date = #{outDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectDormitoryStumanageBySid" parameterType="Long" resultMap="DormitoryStumanageResult">
+        <include refid="selectDormitoryStumanageVo"/>
+        where sid = #{sid}
+    </select>
+        
+    <insert id="insertDormitoryStumanage" parameterType="DormitoryStumanage" useGeneratedKeys="true" keyProperty="sid">
+        insert into dormitory_stumanage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuNo != null">stu_no,</if>
+            <if test="stuName != null">stu_name,</if>
+            <if test="stuBedno != null">stu_bedno,</if>
+            <if test="stuGrade != null">stu_grade,</if>
+            <if test="stuClass != null">stu_class,</if>
+            <if test="stuTell != null">stu_tell,</if>
+            <if test="stuAddress != null">stu_address,</if>
+            <if test="stuAvatar != null">stu_avatar,</if>
+            <if test="stustatus != null">stustatus,</if>
+            <if test="dormitoryNum != null">dormitory_num,</if>
+            <if test="inDate != null">in_date,</if>
+            <if test="outDate != null">out_date,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuNo != null">#{stuNo},</if>
+            <if test="stuName != null">#{stuName},</if>
+            <if test="stuBedno != null">#{stuBedno},</if>
+            <if test="stuGrade != null">#{stuGrade},</if>
+            <if test="stuClass != null">#{stuClass},</if>
+            <if test="stuTell != null">#{stuTell},</if>
+            <if test="stuAddress != null">#{stuAddress},</if>
+            <if test="stuAvatar != null">#{stuAvatar},</if>
+            <if test="stustatus != null">#{stustatus},</if>
+            <if test="dormitoryNum != null">#{dormitoryNum},</if>
+            <if test="inDate != null">#{inDate},</if>
+            <if test="outDate != null">#{outDate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDormitoryStumanage" parameterType="DormitoryStumanage">
+        update dormitory_stumanage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuNo != null">stu_no = #{stuNo},</if>
+            <if test="stuName != null">stu_name = #{stuName},</if>
+            <if test="stuBedno != null">stu_bedno = #{stuBedno},</if>
+            <if test="stuGrade != null">stu_grade = #{stuGrade},</if>
+            <if test="stuClass != null">stu_class = #{stuClass},</if>
+            <if test="stuTell != null">stu_tell = #{stuTell},</if>
+            <if test="stuAddress != null">stu_address = #{stuAddress},</if>
+            <if test="stuAvatar != null">stu_avatar = #{stuAvatar},</if>
+            <if test="stustatus != null">stustatus = #{stustatus},</if>
+            <if test="dormitoryNum != null">dormitory_num = #{dormitoryNum},</if>
+            <if test="inDate != null">in_date = #{inDate},</if>
+            <if test="outDate != null">out_date = #{outDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where sid = #{sid}
+    </update>
+
+    <delete id="deleteDormitoryStumanageBySid" parameterType="Long">
+        delete from dormitory_stumanage where sid = #{sid}
+    </delete>
+
+    <delete id="deleteDormitoryStumanageBySids" parameterType="String">
+        delete from dormitory_stumanage where sid in 
+        <foreach item="sid" collection="array" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </delete>
+
+</mapper>

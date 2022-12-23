@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <th:block th:include="include :: header('受检人员信息')" />
+</head>
+<style>
+    .tdtextbold{
+        font-weight: 500;
+    }
+    .widthh{
+        width: 150px;
+    }
+    #sushecheckdetail{
+        text-align: center;
+    }
+</style>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m">
+<!--        <div class="btn btn-success  dim" style="margin-bottom: 10px;" type="button" id="printbtn"><i class="fa fa-print"></i>&nbsp;打印此表</div><br>-->
+        <table class="table table-bordered" id="nucleicAciddetail">
+            <tbody>
+            <tr><td colspan="9" style="text-align: center;font-size: 20px">
+                <span  th:text="${nucleicAcid.deptName}"></span>
+                <span>受检人员信息&nbsp;</span>
+            </td></tr>
+
+            <tr>
+                <td class="tdtextbold">序号</td>
+                <td class="tdtextbold">姓名</td>
+                <td class="tdtextbold">证件类型</td>
+                <td class="tdtextbold">证件号</td>
+                <td class="tdtextbold">联系方式</td>
+                <td class="tdtextbold">详细地址</td>
+            </tr>
+            <tr th:each="sublist:${sysUserList}">
+                <td th:text="${sublistStat.index+1}"></td>
+                <td th:text="${sublist.userName}"></td>
+                <td th:text="${sublist.sex}"></td>
+                <td th:text="${sublist.remark}"></td>
+                <td th:text="${sublist.phonenumber}"></td>
+                <td th:text="${sublist.email}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script src="../static/ruoyi/js/print.js" th:src="@{/ruoyi/js/print.js}"></script>
+<script type="text/javascript">
+    document.getElementById('printbtn').onclick = function () {
+        Print('#sushecheckdetail', {
+            onStart: function () {
+                console.log('onStart', new Date())
+            },
+            onEnd: function () {
+                console.log('onEnd', new Date())
+            },
+            getStyle: function() {
+                var str = "",
+                    styles = document.querySelectorAll('style,link');
+                console.log(styles);
+                for (var i = 0; i < styles.length; i++) {
+                    str += styles[i].outerHTML;
+                }
+                return str;
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

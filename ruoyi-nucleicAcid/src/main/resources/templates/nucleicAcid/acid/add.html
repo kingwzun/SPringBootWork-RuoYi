@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增核酸信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-acid-add">
+        <h4 class="form-header h4">核酸信息信息</h4>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">核酸时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <input name="naTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">核酸结果：</label>
+            <div class="col-sm-8">
+                <input name="naResult" class="form-control" type="text">
+            </div>
+        </div>
+        <!--            <div class="form-group">    -->
+        <!--                <label class="col-sm-3 control-label">核酸区域：</label>-->
+        <!--                <div class="col-sm-8">-->
+        <!--                    <input name="deptId" class="form-control" type="text">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="col-sm-6">-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">核酸区域：</label>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input name="deptName" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请选择核酸区域" class="form-control">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+        </div>
+        <!--            </div>-->
+        <input name="deptId" type="hidden" id="treeId"/>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">核酸类型：</label>
+            <div class="col-sm-8">
+                <select name="naType" class="form-control m-b" th:with="type=${@dict.getType('na_type')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+
+
+
+
+
+        <h4 class="form-header h4">信息人员对照表信息</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-white btn-sm" onclick="addRow()"><i class="fa fa-plus"> 添加用户</i></button>
+                <button type="button" class="btn btn-white btn-sm" onclick="sub.delRow()"><i class="fa fa-minus"> 删除</i></button>
+                <div class="col-sm-12 select-table table-striped">
+                    <table id="bootstrap-table"></table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script th:inline="javascript">
+    var prefix = ctx + "nucleicAcid/acid"
+    var perIdentityTypeDatas = [[${@dict.getType('identity_type')}]];
+    $("#form-acid-add").validate({
+        // onkeyup: false,
+        // rules:{
+        //     perIdentity:{
+        //         remote: {
+        //             url: prefix + "/checkPerIdentity",
+        //             type: "post",
+        //             dataType: "json",
+        //             data: {
+        //                 "perIdentity": function() {
+        //                     return $.common.trim($("#perIdentity").val());
+        //                 }
+        //             },
+        //             dataFilter: function(data, type) {
+        //                 return $.validate.unique(data);
+        //             }
+        //         }
+        //     },
+        // },
+        // messages: {
+        //     "loginName": {
+        //         remote: "用户不存在"
+        //     }
+        // },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-acid-add').serialize());
+        }
+    }
+
+    $("input[name='naTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $(function() {
+        var options = {
+            pagination: false,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            sidePagination: "client",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'index',
+                    align: 'center',
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        var columnIndex = $.common.sprintf("<input type='hidden' name='index' value='%s'>", $.table.serialNumber(index));
+                        return columnIndex + $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'perIdentityType',
+                    align: 'center',
+                    title: '证件类型',
+                    formatter: function(value, row, index) {
+                        var name = $.common.sprintf("naPersonnelList[%s].perIdentityType", index);
+                        return $.common.dictToSelect(perIdentityTypeDatas, value, name);
+                    }
+                },
+                {
+                    field: 'perIdentity',
+                    align: 'center',
+                    title: '证件号',
+                    formatter: function(value, row, index) {
+                        var html = $.common.sprintf("<input class='form-control' type='text' name='naPersonnelList[%s].perIdentity' value='%s'>", index, value);
+                        return html;
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var value = $.common.isNotEmpty(row.index) ? row.index : $.table.serialNumber(index);
+                        return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="sub.delRowByIndex(\'' + value + '\')"><i class="fa fa-remove"></i>删除</a>';
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+    function addRow() {
+        var count = $("#" + table.options.id).bootstrapTable('getData').length;
+        var row = {
+            index: $.table.serialNumber(count),
+            userId: "",
+            perIdentityType: "",
+            perIdentity: "",
+        }
+        sub.addRow(row);
+    }
+
+    /* 用户管理-新增-选择部门树 */
+    function selectDeptTree() {
+        var treeId = $("#treeId").val();
+        var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+        var url = ctx + "system/user/selectDeptTree/" + deptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero){
+        var body = $.modal.getChildFrame(index);
+        $("#treeId").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        $.modal.close(index);
+    }
+
+    $(function() {
+        $('#post').select2({
+            placeholder: "请选择岗位",
+            allowClear: true
+        });
+    })
+</script>
+</body>
+</html>

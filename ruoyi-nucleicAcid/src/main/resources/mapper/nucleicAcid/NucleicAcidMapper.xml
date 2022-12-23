@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.nucleicAcid.mapper.NucleicAcidMapper">
+
+    <resultMap type="NucleicAcid" id="NucleicAcidResult">
+        <result property="naId"    column="na_id"    />
+        <result property="naTime"    column="na_time"    />
+        <result property="naResult"    column="na_result"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="naType"    column="na_type"    />
+    </resultMap>
+
+    <resultMap id="NucleicAcidNaPersonnelResult" type="NucleicAcid" extends="NucleicAcidResult">
+        <collection property="naPersonnelList" notNullColumn="sub_na_per_id" javaType="java.util.List" resultMap="NaPersonnelResult" />
+    </resultMap>
+
+    <resultMap type="NaPersonnel" id="NaPersonnelResult">
+        <result property="naPerId"    column="sub_na_per_id"    />
+        <result property="naId"    column="sub_na_id"    />
+        <result property="userId"    column="sub_user_id"    />
+        <result property="perIdentityType"    column="sub_per_identity_type"    />
+        <result property="perIdentity"    column="sub_per_identity"    />
+    </resultMap>
+
+    <sql id="selectNucleicAcidVo">
+                    select na_id, na_time, na_result, dept_id, dept_name, na_type from nucleic_acid a
+    </sql>
+
+    <select id="selectNucleicAcidList" parameterType="NucleicAcid" resultMap="NucleicAcidResult">
+       <include refid="selectNucleicAcidVo"/>
+--         select a.na_id, a.na_time, a.na_result, a.dept_id, a.dept_name, a.na_type,
+--         b.na_per_id as sub_na_per_id, b.na_id as sub_na_id, b.user_id as sub_user_id, b.per_identity_type as sub_per_identity_type, b.per_identity as sub_per_identity
+--         from nucleic_acid a
+--         left join na_personnel b on b.na_id = a.na_id
+        <where>
+            <if test="naTime != null "> and na_time = #{naTime}</if>
+            <if test="naResult != null "> and na_result = #{naResult}</if>
+            <if test="deptName != null  and deptName != ''"> and dept_name like concat('%', #{deptName}, '%')</if>
+            <if test="naType != null "> and na_type = #{naType}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectNucleicAcidByNaId" parameterType="Long" resultMap="NucleicAcidNaPersonnelResult">
+        select a.na_id, a.na_time, a.na_result, a.dept_id, a.dept_name, a.na_type,
+               b.na_per_id as sub_na_per_id, b.na_id as sub_na_id, b.user_id as sub_user_id, b.per_identity_type as sub_per_identity_type, b.per_identity as sub_per_identity
+        from nucleic_acid a
+                 left join na_personnel b on b.na_id = a.na_id
+        where a.na_id = #{naId}
+    </select>
+
+    <insert id="insertNucleicAcid" parameterType="NucleicAcid" keyProperty="naId">
+        insert into nucleic_acid
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="naId != null">na_id,</if>
+            <if test="naTime != null">na_time,</if>
+            <if test="naResult != null">na_result,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="deptName != null">dept_name,</if>
+            <if test="naType != null">na_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="naId != null">#{naId},</if>
+            <if test="naTime != null">#{naTime},</if>
+            <if test="naResult != null">#{naResult},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="deptName != null">#{deptName},</if>
+            <if test="naType != null">#{naType},</if>
+        </trim>
+    </insert>
+
+    <update id="updateNucleicAcid" parameterType="NucleicAcid">
+        update nucleic_acid
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="naTime != null">na_time = #{naTime},</if>
+            <if test="naResult != null">na_result = #{naResult},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="deptName != null">dept_name = #{deptName},</if>
+            <if test="naType != null">na_type = #{naType},</if>
+        </trim>
+        where na_id = #{naId}
+    </update>
+
+    <delete id="deleteNucleicAcidByNaId" parameterType="Long">
+        delete from nucleic_acid where na_id = #{naId}
+    </delete>
+
+    <delete id="deleteNucleicAcidByNaIds" parameterType="String">
+        delete from nucleic_acid where na_id in
+        <foreach item="naId" collection="array" open="(" separator="," close=")">
+            #{naId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteNaPersonnelByNaIds" parameterType="String">
+        delete from na_personnel where na_id in
+        <foreach item="naId" collection="array" open="(" separator="," close=")">
+            #{naId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteNaPersonnelByNaId" parameterType="Long">
+        delete from na_personnel where na_id = #{naId}
+    </delete>
+
+    <insert id="batchNaPersonnel">
+        insert into na_personnel( na_per_id, na_id, user_id, per_identity_type, per_identity) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.naPerId}, #{item.naId}, #{item.userId}, #{item.perIdentityType}, #{item.perIdentity})
+        </foreach>
+    </insert>
+
+</mapper>

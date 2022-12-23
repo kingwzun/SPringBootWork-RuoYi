@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>若依介绍</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/style.min.css" th:href="@{/css/style.min.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<div class="row border-bottom white-bg dashboard-header">
+    <h2>[[${name}]]你好</h2>
+    <b>今日任务：</b><span>[[${task}]]</span>
+</div>
+
+    <div class="row border-bottom white-bg dashboard-header">
+		<div class="col-sm-3">
+			<h2>核酸检测系统(若依框架)</h2>
+
+				<b>当前版本：</b><span>v[[${version}]]</span>
+			</p>
+
+		</div>
+        <div class="col-sm-5">
+            <h2>系统介绍</h2>
+            <p>面对新冠肺炎疫情常态化防控新形势，大规模核酸检测成为发现疫情、防止传播、落实疫情严防严控的必要手段。本系统适用于市级区域核酸检测工作的全流程，可应用于核酸检测点、受检者及物流人员个人设备、医院实验室和政府机关。受检人员、采集人员、物流人员、实验室检测人员、政府机关管理人员均可使用本系统完成地区核酸检测任务。本系统可有效减轻人员工作量，避免交叉感染，提升了工作效率。</p>
+            <p>
+                <b>当前版本：</b><span>v[[${version}]]</span>
+            </p>
+
+        </div>
+        <div class="col-sm-4">
+            <h4>若依框架技术选型：</h4>
+            <ol>
+                <li>核心框架：Spring Boot。</li>
+                <li>安全框架：Apache Shiro。</li>
+                <li>模板引擎：Thymeleaf。</li>
+                <li>持久层框架：MyBatis。</li>
+				<li>定时任务:Quartz。</li>
+                <li>数据库连接池：Druid。</li>
+                <li>工具类：Fastjson。</li>
+                <li>更多……</li>
+            </ol>
+        </div>
+
+    </div>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script type="text/javascript">
+	    $('#pay-qrcode').click(function(){
+	        var html=$(this).html();
+	        parent.layer.open({
+	            title: false,
+	            type: 1,
+	            closeBtn:false,
+	            shadeClose:true,
+	            area: ['600px', '360px'],
+	            content: html
+	        });
+	    });
+    </script>
+</body>
+</html>

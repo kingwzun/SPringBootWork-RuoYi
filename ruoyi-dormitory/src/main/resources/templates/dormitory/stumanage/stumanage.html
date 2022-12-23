@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('住宿生信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>学生编号：</label>
+                                <input type="text" name="stuNo"/>
+                            </li>
+                            <li>
+                                <label>学生姓名：</label>
+                                <input type="text" name="stuName"/>
+                            </li>
+                            <li>
+                                <label>床号：</label>
+                                <input type="text" name="stuBedno"/>
+                            </li>
+                            <li>
+                                <label>年级：</label>
+                                <input type="text" name="stuGrade"/>
+                            </li>
+                            <li>
+                                <label>班级：</label>
+                                <input type="text" name="stuClass"/>
+                            </li>
+                            <li>
+                                <label>联系电话：</label>
+                                <input type="text" name="stuTell"/>
+                            </li>
+                            <li>
+                                <label>家庭住址：</label>
+                                <input type="text" name="stuAddress"/>
+                            </li>
+                            <li>
+                                <label>照片：</label>
+                                <input type="text" name="stuAvatar"/>
+                            </li>
+                            <li>
+                                <label>宿舍号：</label>
+                                <input type="text" name="dormitoryNum"/>
+                            </li>
+                            <li>
+                                <label>入住时间：</label>
+                                <input type="text" class="time-input" placeholder="请选择入住时间" name="inDate"/>
+                            </li>
+                            <li>
+                                <label>退宿时间：</label>
+                                <input type="text" class="time-input" placeholder="请选择退宿时间" name="outDate"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dormitory:stumanage:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="dormitory:stumanage:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="dormitory:stumanage:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dormitory:stumanage:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('dormitory:stumanage:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('dormitory:stumanage:remove')}]];
+        var prefix = ctx + "dormitory/stumanage";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "住宿生信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'sid',
+                    title: '主键',
+                    visible: false
+                },
+                {
+                    field: 'stuNo',
+                    title: '学生编号'
+                },
+                {
+                    field: 'stuName',
+                    title: '学生姓名'
+                },
+                {
+                    field: 'stuBedno',
+                    title: '床号'
+                },
+                {
+                    field: 'stuGrade',
+                    title: '年级'
+                },
+                {
+                    field: 'stuClass',
+                    title: '班级'
+                },
+                {
+                    field: 'stuTell',
+                    title: '联系电话'
+                },
+                {
+                    field: 'stuAddress',
+                    title: '家庭住址'
+                },
+                {
+                    field: 'stuAvatar',
+                    title: '照片'
+                },
+                {
+                    field: 'stustatus',
+                    title: '状态'
+                },
+                {
+                    field: 'dormitoryNum',
+                    title: '宿舍号'
+                },
+                {
+                    field: 'inDate',
+                    title: '入住时间'
+                },
+                {
+                    field: 'outDate',
+                    title: '退宿时间'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.sid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.sid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.nucleicAcid.mapper.NaPersonnelMapper">
+    
+    <resultMap type="NaPersonnel" id="NaPersonnelResult">
+        <result property="naPerId"    column="na_per_id"    />
+        <result property="naId"    column="na_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="perIdentityType"    column="per_identity_type"    />
+        <result property="perIdentity"    column="per_identity"    />
+    </resultMap>
+
+    <sql id="selectNaPersonnelVo">
+        select na_per_id, na_id, user_id, per_identity_type, per_identity from na_personnel
+    </sql>
+
+    <select id="selectNaPersonnelList" parameterType="NaPersonnel" resultMap="NaPersonnelResult">
+        <include refid="selectNaPersonnelVo"/>
+        <where>
+<!--            <if test="naId != null "> and na_id = #{naId}</if>-->
+<!--            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>-->
+<!--            <if test="perIdentityType != null  and perIdentityType != ''"> and per_identity_type = #{perIdentityType}</if>-->
+<!--            <if test="perIdentity != null  and perIdentity != ''"> and per_identity = #{perIdentity}</if>-->
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+
+    </select>
+    
+    <select id="selectNaPersonnelByNaPerId" parameterType="Long" resultMap="NaPersonnelResult">
+        <include refid="selectNaPersonnelVo"/>
+        where na_per_id = #{naPerId}
+    </select>
+        
+    <insert id="insertNaPersonnel" parameterType="NaPersonnel" useGeneratedKeys="true" keyProperty="naPerId">
+        insert into na_personnel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="naId != null">na_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="perIdentityType != null">per_identity_type,</if>
+            <if test="perIdentity != null">per_identity,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="naId != null">#{naId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="perIdentityType != null">#{perIdentityType},</if>
+            <if test="perIdentity != null">#{perIdentity},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNaPersonnel" parameterType="NaPersonnel">
+        update na_personnel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="naId != null">na_id = #{naId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="perIdentityType != null">per_identity_type = #{perIdentityType},</if>
+            <if test="perIdentity != null">per_identity = #{perIdentity},</if>
+        </trim>
+        where na_per_id = #{naPerId}
+    </update>
+
+    <delete id="deleteNaPersonnelByNaPerId" parameterType="Long">
+        delete from na_personnel where na_per_id = #{naPerId}
+    </delete>
+
+    <delete id="deleteNaPersonnelByNaPerIds" parameterType="String">
+        delete from na_personnel where na_per_id in 
+        <foreach item="naPerId" collection="array" open="(" separator="," close=")">
+            #{naPerId}
+        </foreach>
+    </delete>
+
+</mapper>

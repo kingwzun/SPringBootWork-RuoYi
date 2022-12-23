@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dormitory.mapper.DormitoryManageMapper">
+
+    <resultMap type="DormitoryManage" id="DormitoryManageResult">
+        <result property="id"    column="id"    />
+        <result property="dormitoryNum"    column="dormitory_num"    />
+        <result property="dormitoryType"    column="dormitory_type"    />
+        <result property="dormitoryRegion"    column="dormitory_region"    />
+        <result property="dormitoryManager"    column="dormitory_manager"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <resultMap id="DormitoryManageDormitoryStumanageResult" type="DormitoryManage" extends="DormitoryManageResult">
+        <collection property="dormitoryStumanageList" notNullColumn="sub_sid" javaType="java.util.List" resultMap="DormitoryStumanageResult" />
+    </resultMap>
+
+    <resultMap type="DormitoryStumanage" id="DormitoryStumanageResult">
+        <result property="sid"    column="sub_sid"    />
+        <result property="stuNo"    column="sub_stu_no"    />
+        <result property="stuName"    column="sub_stu_name"    />
+        <result property="stuBedno"    column="sub_stu_bedno"    />
+        <result property="stuGrade"    column="sub_stu_grade"    />
+        <result property="stuClass"    column="sub_stu_class"    />
+        <result property="stuTell"    column="sub_stu_tell"    />
+        <result property="stuAddress"    column="sub_stu_address"    />
+        <result property="stuAvatar"    column="sub_stu_avatar"    />
+        <result property="stustatus"    column="sub_stustatus"    />
+        <result property="dormitoryNum"    column="sub_dormitory_num"    />
+        <result property="inDate"    column="sub_in_date"    />
+        <result property="outDate"    column="sub_out_date"    />
+        <result property="createTime"    column="sub_create_time"    />
+        <result property="updateTime"    column="sub_update_time"    />
+        <result property="createBy"    column="sub_create_by"    />
+        <result property="remark"    column="sub_remark"    />
+    </resultMap>
+
+    <sql id="selectDormitoryManageVo">
+        select id, dormitory_num, dormitory_type, dormitory_region, dormitory_manager, remark, status, create_time, update_time, create_by from dormitory_manage
+    </sql>
+
+    <select id="selectDormitoryManageList" parameterType="DormitoryManage" resultMap="DormitoryManageResult">
+        <include refid="selectDormitoryManageVo"/>
+        <where>
+            <if test="dormitoryNum != null "> and dormitory_num = #{dormitoryNum}</if>
+            <if test="dormitoryType != null  and dormitoryType != ''"> and dormitory_type = #{dormitoryType}</if>
+            <if test="dormitoryRegion != null  and dormitoryRegion != ''"> and dormitory_region = #{dormitoryRegion}</if>
+            <if test="dormitoryManager != null  and dormitoryManager != ''"> and dormitory_manager = #{dormitoryManager}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectDormitoryManageById" parameterType="Long" resultMap="DormitoryManageDormitoryStumanageResult">
+        select a.id, a.dormitory_num, a.dormitory_type, a.dormitory_region, a.dormitory_manager, a.remark, a.status, a.create_time, a.update_time, a.create_by,
+               b.sid as sub_sid, b.stu_no as sub_stu_no, b.stu_name as sub_stu_name, b.stu_bedno as sub_stu_bedno, b.stu_grade as sub_stu_grade, b.stu_class as sub_stu_class, b.stu_tell as sub_stu_tell, b.stu_address as sub_stu_address, b.stu_avatar as sub_stu_avatar, b.stustatus as sub_stustatus, b.dormitory_num as sub_dormitory_num, b.in_date as sub_in_date, b.out_date as sub_out_date, b.create_time as sub_create_time, b.update_time as sub_update_time, b.create_by as sub_create_by, b.remark as sub_remark
+        from dormitory_manage a
+                 left join dormitory_stumanage b on b.dormitory_num = a.id
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertDormitoryManage" parameterType="DormitoryManage" useGeneratedKeys="true" keyProperty="id">
+        insert into dormitory_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dormitoryNum != null">dormitory_num,</if>
+            <if test="dormitoryType != null and dormitoryType != ''">dormitory_type,</if>
+            <if test="dormitoryRegion != null and dormitoryRegion != ''">dormitory_region,</if>
+            <if test="dormitoryManager != null">dormitory_manager,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dormitoryNum != null">#{dormitoryNum},</if>
+            <if test="dormitoryType != null and dormitoryType != ''">#{dormitoryType},</if>
+            <if test="dormitoryRegion != null and dormitoryRegion != ''">#{dormitoryRegion},</if>
+            <if test="dormitoryManager != null">#{dormitoryManager},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDormitoryManage" parameterType="DormitoryManage">
+        update dormitory_manage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dormitoryNum != null">dormitory_num = #{dormitoryNum},</if>
+            <if test="dormitoryType != null and dormitoryType != ''">dormitory_type = #{dormitoryType},</if>
+            <if test="dormitoryRegion != null and dormitoryRegion != ''">dormitory_region = #{dormitoryRegion},</if>
+            <if test="dormitoryManager != null">dormitory_manager = #{dormitoryManager},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDormitoryManageById" parameterType="Long">
+        delete from dormitory_manage where id = #{id}
+    </delete>
+
+    <delete id="deleteDormitoryManageByIds" parameterType="String">
+        delete from dormitory_manage where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteDormitoryStumanageByDormitoryNums" parameterType="String">
+        delete from dormitory_stumanage where dormitory_num in
+        <foreach item="dormitoryNum" collection="array" open="(" separator="," close=")">
+            #{dormitoryNum}
+        </foreach>
+    </delete>
+
+    <delete id="deleteDormitoryStumanageByDormitoryNum" parameterType="Long">
+        delete from dormitory_stumanage where dormitory_num = #{dormitoryNum}
+    </delete>
+
+    <insert id="batchDormitoryStumanage">
+        insert into dormitory_stumanage( sid, stu_no, stu_name, stu_bedno, stu_grade, stu_class, stu_tell, stu_address, stu_avatar, stustatus, dormitory_num, in_date, out_date, create_time, update_time, create_by, remark) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.sid}, #{item.stuNo}, #{item.stuName}, #{item.stuBedno}, #{item.stuGrade}, #{item.stuClass}, #{item.stuTell}, #{item.stuAddress}, #{item.stuAvatar}, #{item.stustatus}, #{item.dormitoryNum}, #{item.inDate}, #{item.outDate}, #{item.createTime}, #{item.updateTime}, #{item.createBy}, #{item.remark})
+        </foreach>
+    </insert>
+
+</mapper>
