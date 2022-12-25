@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.laboratory.mapper.NaLaboratoryMapper">
+    
+    <resultMap type="NaLaboratory" id="NaLaboratoryResult">
+        <result property="labId"    column="lab_id"    />
+        <result property="labName"    column="lab_name"    />
+        <result property="labAddress"    column="lab_address"    />
+    </resultMap>
+
+    <sql id="selectNaLaboratoryVo">
+        select lab_id, lab_name, lab_address from na_laboratory
+    </sql>
+
+    <select id="selectNaLaboratoryList" parameterType="NaLaboratory" resultMap="NaLaboratoryResult">
+        <include refid="selectNaLaboratoryVo"/>
+        <where>  
+            <if test="labName != null  and labName != ''"> and lab_name like concat('%', #{labName}, '%')</if>
+            <if test="labAddress != null  and labAddress != ''"> and lab_address = #{labAddress}</if>
+        </where>
+    </select>
+    
+    <select id="selectNaLaboratoryByLabId" parameterType="Long" resultMap="NaLaboratoryResult">
+        <include refid="selectNaLaboratoryVo"/>
+        where lab_id = #{labId}
+    </select>
+        
+    <insert id="insertNaLaboratory" parameterType="NaLaboratory" useGeneratedKeys="true" keyProperty="labId">
+        insert into na_laboratory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="labName != null and labName != ''">lab_name,</if>
+            <if test="labAddress != null">lab_address,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="labName != null and labName != ''">#{labName},</if>
+            <if test="labAddress != null">#{labAddress},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNaLaboratory" parameterType="NaLaboratory">
+        update na_laboratory
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="labName != null and labName != ''">lab_name = #{labName},</if>
+            <if test="labAddress != null">lab_address = #{labAddress},</if>
+        </trim>
+        where lab_id = #{labId}
+    </update>
+
+    <delete id="deleteNaLaboratoryByLabId" parameterType="Long">
+        delete from na_laboratory where lab_id = #{labId}
+    </delete>
+
+    <delete id="deleteNaLaboratoryByLabIds" parameterType="String">
+        delete from na_laboratory where lab_id in 
+        <foreach item="labId" collection="array" open="(" separator="," close=")">
+            #{labId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -249,16 +249,12 @@
         <module>ruoyi-admin</module>
         <module>ruoyi-framework</module>
         <module>ruoyi-system</module>
-        <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
-        <module>ruoyi-student</module>
-        <module>ruoyi-dormitory</module>
-        <module>royi-studormitory</module>
         <module>ruoyi-nucleicAcid</module>
-        <module>ruoyi-personnel</module>
         <module>ruoyi-NaPersonnel</module>
         <module>ruoyi-userPost</module>
+        <module>ruoyi-laboratory</module>
 
     </modules>
     <packaging>pom</packaging>

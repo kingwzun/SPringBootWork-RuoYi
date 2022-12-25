@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改实验室管理')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-laboratoryManage-edit" th:object="${naLaboratory}">
+            <input name="labId" th:field="*{labId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">实验室名称：</label>
+                <div class="col-sm-8">
+                    <input name="labName" th:field="*{labName}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">实验室位置：</label>
+                <div class="col-sm-8">
+                    <input name="labAddress" th:field="*{labAddress}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "laboratory/laboratoryManage";
+        $("#form-laboratoryManage-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-laboratoryManage-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

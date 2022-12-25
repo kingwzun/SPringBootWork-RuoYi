@@ -56,42 +56,18 @@
             <artifactId>ruoyi-framework</artifactId>
         </dependency>
 
-        <!-- 定时任务-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-quartz</artifactId>
-        </dependency>
-
         <!-- 代码生成-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
-        <!--学生模块-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-student</artifactId>
-        </dependency>
-        <!-- 宿舍模块-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-dormitory</artifactId>
-        </dependency>
-        <!-- 学生宿舍分配模块-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>royi-studormitory</artifactId>
-        </dependency>
+
         <!-- 核酸信息管理模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-nucleicAcid</artifactId>
         </dependency>
-        <!-- 核酸人员管理模块-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-personnel</artifactId>
-        </dependency>
+
         <!-- 核酸信息 和人员 关系模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>

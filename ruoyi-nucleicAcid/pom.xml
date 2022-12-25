@@ -27,10 +27,7 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-system</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-personnel</artifactId>
-        </dependency>
+
     </dependencies>
 
     <properties>
