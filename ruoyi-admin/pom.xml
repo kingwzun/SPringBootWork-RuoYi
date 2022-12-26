@@ -73,13 +73,18 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-NaPersonnel</artifactId>
         </dependency>
-        <!-- 站点 和医生 关系模块-->
+        <!-- 实验室模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-userPost</artifactId>
+            <artifactId>ruoyi-laboratory</artifactId>
         </dependency>
-    </dependencies>
 
+    <!-- 站点 和医生 关系模块-->
+    <dependency>
+        <groupId>com.ruoyi</groupId>
+        <artifactId>ruoyi-userPost</artifactId>
+    </dependency>
+</dependencies>
     <build>
         <plugins>
             <plugin>

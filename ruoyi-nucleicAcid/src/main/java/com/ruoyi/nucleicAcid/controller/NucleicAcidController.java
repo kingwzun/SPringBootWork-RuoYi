@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.entity.SysDept;
+import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.nucleicAcid.domain.NaPersonnel;
 
@@ -84,7 +85,12 @@ public class NucleicAcidController extends BaseController {
      * 新增核酸信息
      */
     @GetMapping("/add")
-    public String add() {
+    public String add( ModelMap mmap) {
+        // 取身份信息
+        SysUser user = getSysUser();
+        SysDept sysDept = iSysDeptService.selectDeptById(user.getDeptId());
+        mmap.put("deptName", sysDept.getDeptName());
+        mmap.put("deptId", user.getDeptId());
         return prefix + "/add";
     }
 
@@ -112,9 +118,11 @@ public class NucleicAcidController extends BaseController {
             }
             nucleicAcid.setNaPersonnelList(naPersonnelList);
         }
-
-
-
+        // 取身份信息
+        SysUser user = getSysUser();
+        SysDept sysDept = iSysDeptService.selectDeptById(user.getDeptId());
+        nucleicAcid.setDeptId(user.getDeptId());
+        nucleicAcid.setDeptName(sysDept.getDeptName());
         return toAjax(nucleicAcidService.insertNucleicAcid(nucleicAcid));
     }
 
@@ -128,8 +136,8 @@ public class NucleicAcidController extends BaseController {
         mmap.put("nucleicAcid", nucleicAcid);
         SysDept sysDept = iSysDeptService.selectDeptById(nucleicAcid.getDeptId());
         mmap.put("deptName", sysDept.getDeptName());
-        System.out.println(mmap.get("deptName"));
-        System.out.println(sysDept.getDeptName());
+//        System.out.println(mmap.get("deptName"));
+//        System.out.println(sysDept.getDeptName());
 
         return prefix + "/edit";
     }

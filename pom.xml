@@ -242,6 +242,12 @@
                 <artifactId>ruoyi-userPost</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+            <!-- 实验室模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-laboratory</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
