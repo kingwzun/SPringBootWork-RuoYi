@@ -248,6 +248,18 @@
                 <artifactId>ruoyi-laboratory</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+            <!-- 任务分配模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-arrangement</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+            <!-- 任务和医护人员对照模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-arrMedical</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -261,6 +273,8 @@
         <module>ruoyi-NaPersonnel</module>
         <module>ruoyi-userPost</module>
         <module>ruoyi-laboratory</module>
+        <module>ruoyi-arrangement</module>
+        <module>ruoyi-arrMedical</module>
 
     </modules>
     <packaging>pom</packaging>

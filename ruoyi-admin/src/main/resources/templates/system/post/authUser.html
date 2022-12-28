@@ -114,20 +114,7 @@
 			var url = prefix + '/selectUser/' + $("#postId").val();
 		    $.modal.open("选择用户", url);
 		}
-		
-		/* 分配用户-批量取消授权 */
-		function cancelAuthUserAll(userId) {
-		    var rows = $.table.selectFirstColumns();
-       		if (rows.length == 0) {
-       			$.modal.alertWarning("请至少选择一条记录");
-       			return;
-       		}
-       		$.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
-    			var data = { "postId": $("#postId").val(), "userIds": rows.join() };
-    			$.operate.submit(prefix + "/cancelAll", "post", "json", data);
-    		});
-		}
-		
+
 		/* 分配用户-取消授权 */
 		function cancelAuthUser(userId) {
 			$.modal.confirm("确认要取消该用户角色吗？", function() {

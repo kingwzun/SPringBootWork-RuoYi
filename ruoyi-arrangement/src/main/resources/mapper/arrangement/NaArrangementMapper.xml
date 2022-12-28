@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.arrangement.mapper.NaArrangementMapper">
+    
+    <resultMap type="NaArrangement" id="NaArrangementResult">
+        <result property="arrId"    column="arr_id"    />
+        <result property="arrTime"    column="arr_time"    />
+        <result property="arrAddress"    column="arr_address"    />
+        <result property="arrStatus"    column="arr_status"    />
+        <result property="pointId"    column="point_id"    />
+        <result property="deliveryId"    column="delivery_id"    />
+        <result property="laboratoryId"    column="laboratory_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectNaArrangementVo">
+        select arr_id, arr_time, arr_address, arr_status, point_id, delivery_id, laboratory_id, create_by, create_time, update_by, update_time from na_arrangement
+    </sql>
+
+    <select id="selectNaArrangementList" parameterType="NaArrangement" resultMap="NaArrangementResult">
+        <include refid="selectNaArrangementVo"/>
+        <where>  
+            <if test="arrTime != null "> and arr_time = #{arrTime}</if>
+            <if test="arrAddress != null  and arrAddress != ''"> and arr_address = #{arrAddress}</if>
+            <if test="arrStatus != null  and arrStatus != ''"> and arr_status = #{arrStatus}</if>
+            <if test="pointId != null "> and point_id = #{pointId}</if>
+            <if test="deliveryId != null "> and delivery_id = #{deliveryId}</if>
+            <if test="laboratoryId != null "> and laboratory_id = #{laboratoryId}</if>
+        </where>
+    </select>
+    
+    <select id="selectNaArrangementByArrId" parameterType="Long" resultMap="NaArrangementResult">
+        <include refid="selectNaArrangementVo"/>
+        where arr_id = #{arrId}
+    </select>
+        
+    <insert id="insertNaArrangement" parameterType="NaArrangement" useGeneratedKeys="true" keyProperty="arrId">
+        insert into na_arrangement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="arrTime != null">arr_time,</if>
+            <if test="arrAddress != null and arrAddress != ''">arr_address,</if>
+            <if test="arrStatus != null and arrStatus != ''">arr_status,</if>
+            <if test="pointId != null">point_id,</if>
+            <if test="deliveryId != null">delivery_id,</if>
+            <if test="laboratoryId != null">laboratory_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="arrTime != null">#{arrTime},</if>
+            <if test="arrAddress != null and arrAddress != ''">#{arrAddress},</if>
+            <if test="arrStatus != null and arrStatus != ''">#{arrStatus},</if>
+            <if test="pointId != null">#{pointId},</if>
+            <if test="deliveryId != null">#{deliveryId},</if>
+            <if test="laboratoryId != null">#{laboratoryId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNaArrangement" parameterType="NaArrangement">
+        update na_arrangement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="arrTime != null">arr_time = #{arrTime},</if>
+            <if test="arrAddress != null and arrAddress != ''">arr_address = #{arrAddress},</if>
+            <if test="arrStatus != null and arrStatus != ''">arr_status = #{arrStatus},</if>
+            <if test="pointId != null">point_id = #{pointId},</if>
+            <if test="deliveryId != null">delivery_id = #{deliveryId},</if>
+            <if test="laboratoryId != null">laboratory_id = #{laboratoryId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where arr_id = #{arrId}
+    </update>
+
+    <delete id="deleteNaArrangementByArrId" parameterType="Long">
+        delete from na_arrangement where arr_id = #{arrId}
+    </delete>
+
+    <delete id="deleteNaArrangementByArrIds" parameterType="String">
+        delete from na_arrangement where arr_id in 
+        <foreach item="arrId" collection="array" open="(" separator="," close=")">
+            #{arrId}
+        </foreach>
+    </delete>
+
+</mapper>

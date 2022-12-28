@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('任务安排列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>检测时间：</label>
+                                <input type="text" class="time-input" placeholder="请选择检测时间" name="arrTime"/>
+                            </li>
+                            <li>
+                                <label>检测区域：</label>
+                                <input type="text" name="arrAddress"/>
+                            </li>
+                            <li>
+                                <label>检测点ID：</label>
+                                <input type="text" name="pointId"/>
+                            </li>
+                            <li>
+                                <label>物流人员ID：</label>
+                                <input type="text" name="deliveryId"/>
+                            </li>
+                            <li>
+                                <label>实验室ID：</label>
+                                <input type="text" name="laboratoryId"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="arrangement:arrangementManager:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="arrangement:arrangementManager:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="arrangement:arrangementManager:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="arrangement:arrangementManager:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('arrangement:arrangementManager:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('arrangement:arrangementManager:remove')}]];
+        var prefix = ctx + "arrangement/arrangementManager";
+        var listFlag = [[${@permission.hasPermi('system:post:authUser')}]];//用于查看医生详细信息
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "任务安排",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'arrId',
+                    title: '任务ID',
+                    visible: false
+                },
+                {
+                    field: 'arrTime',
+                    title: '检测时间'
+                },
+                {
+                    field: 'arrAddress',
+                    title: '检测区域'
+                },
+                {
+                    field: 'arrStatus',
+                    title: '状态'
+                },
+                {
+                    field: 'pointId',
+                    title: '检测点ID'
+                },
+                {
+                    field: 'deliveryId',
+                    title: '物流人员ID'
+                },
+                {
+                    field: 'laboratoryId',
+                    title: '实验室ID'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.arrId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        //用于查看分配的医护人员详细信息
+                        actions.push('<a class="btn btn-info btn-xs ' + listFlag + '" href="javascript:void(0)" onclick="listColumn(\'' + row.arrId + '\')"><i class="fa fa-search"></i>分配医护人员</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.arrId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        /**
+         * 分配医护人员
+         */
+        function listColumn(arrId){
+            var url=prefix+'/authUser/'+arrId;
+            $.modal.openTab("分配医护人员",url);
+
+        };
+    </script>
+</body>
+</html>
