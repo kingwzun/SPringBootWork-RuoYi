@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.arrangement.mapper.NaArrMedicalMapper">
+    
+    <resultMap type="NaArrMedical" id="NaArrMedicalResult">
+        <result property="arrId"    column="arr_id"    />
+        <result property="medId"    column="med_id"    />
+    </resultMap>
+
+    <sql id="selectNaArrMedicalVo">
+        select arr_id, med_id from na_arr_medical
+    </sql>
+
+    <select id="selectNaArrMedicalList" parameterType="NaArrMedical" resultMap="NaArrMedicalResult">
+        <include refid="selectNaArrMedicalVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectNaArrMedicalByArrId" parameterType="Long" resultMap="NaArrMedicalResult">
+        <include refid="selectNaArrMedicalVo"/>
+        where arr_id = #{arrId}
+    </select>
+    <select id="selectNaArrMedicalByMedId" parameterType="Long" resultMap="NaArrMedicalResult">
+        <include refid="selectNaArrMedicalVo"/>
+        where med_id = #{medId}
+    </select>
+    <insert id="insertNaArrMedical" parameterType="NaArrMedical">
+        insert into na_arr_medical
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="arrId != null">arr_id,</if>
+            <if test="medId != null">med_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="arrId != null">#{arrId},</if>
+            <if test="medId != null">#{medId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNaArrMedical" parameterType="NaArrMedical">
+        update na_arr_medical
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="medId != null">med_id = #{medId},</if>
+        </trim>
+        where arr_id = #{arrId}
+    </update>
+
+    <delete id="deleteNaArrMedical" parameterType="NaArrMedical">
+        delete from na_arr_medical where arr_id = #{arrId} and med_id = #{medId}
+    </delete>
+
+
+
+</mapper>
