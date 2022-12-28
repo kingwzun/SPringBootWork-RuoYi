@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.arrangement.domain.NaArrMedical;
 import com.ruoyi.arrangement.service.INaArrMedicalService;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -189,81 +190,45 @@ public class NaArrangementController extends BaseController
         return toAjax(arrMedicalService.deleteNaArrMedical(arrMedical));
     }
 
-//    /**
-//     * 选择用户
-//     */
-//    @GetMapping("/authUser/selectUser/{postId}")
-//    public String selectUser(@PathVariable("postId") Long postId, ModelMap mmap)
-//    {
-//        mmap.put("post",postService.selectPostById(postId));
-//        return prefix + "/selectUser";
-//    }
-//
-//    /**
-//     * 查询未分配用户角色列表
-//     */
-//    @RequiresPermissions("system:post:list")
-//    @PostMapping("/authUser/unallocatedList")
-//    @ResponseBody
-//    public TableDataInfo unallocatedList(SysPost post,SysUser user)
-//    {
-//        startPage();
-//        List<SysUser> list = userService.selectUserList(user);
-//        System.out.println(list.size()+"2222222");
-//        //        mmap.get(post);
-//        Long postId = post.getPostId();
-////        System.out.println(postId+"22222222");
-//
-////        Object post = mmap.get("post");
-//
-////        List<SysUser> users=new ArrayList<>();
-////        for (UserPost userPost : userPostService.selectUserPostByPostId(postId)) {
-////            SysUser sysUser = userService.selectUserById(userPost.getUserId());
-////            list.remove(sysUser);
-////        }
-//        //只有对照表里面有改医生，就不显示
-//        for (UserPost userPost : userPostService.selectUserPostList(new UserPost())) {
-//            SysUser sysUser = userService.selectUserById(userPost.getUserId());
-//            list.remove(sysUser);
-//        }
-////        for (SysUser sysUser : list) {
-////            if()
-////        }
-//
-//
-//        System.out.println(list.size()+"fdsfsd");
-//
-//        return getDataTable(list);
-//    }
-//
-//    /**
-//     * 批量选择用户授权
-//     */
-//    @RequiresPermissions("system:post:edit")
-//    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-//    @PostMapping("/authUser/selectAll")
-//    @ResponseBody
-//    public AjaxResult selectAuthUserAll(SysPost post, String userIds)
-//    {
-//        Long postId = post.getPostId();
-////        roleService.checkRoleDataScope(roleId);
-////        return toAjax(roleService.insertAuthUsers(roleId, userIds));
-////        postService.checkPostCodeUnique()
-////        postService.checkPostNameUnique(postId);
-//        System.out.println(userIds+"___________________________");
-//        Integer num=0;
-//        for(String userId:userIds.split(",")){
-//
-//            System.out.println(userId);
-//            UserPost userPost = new UserPost();
-//            userPost.setUserId(new Long(userId));
-//            userPost.setPostId(post.getPostId());
-//            userPostService.insertUserPost(userPost);
-//            num+=1;
-//        }
-////        .insertUserPost
-////        System.out.println(userIds+"userIds");
-////        roleService.checkRoleDataScope(roleId);
-//        return toAjax(num);
-//    }
+    /**
+     * 选择用户
+     */
+    @GetMapping("/authUser/selectUser/{arrId}")
+    public String selectUser(@PathVariable("arrId") Long arrId, ModelMap mmap)
+    {
+        System.out.println("NaArrangementController.selectUser");
+
+        mmap.put("arrId",arrId);
+        return prefix + "/selectUser";
+    }
+
+    /**
+     * 查询未分配用户角色列表
+     * (只有对照表里面有改医生，就不显示)
+     */
+    @RequiresPermissions("system:post:list")
+    @PostMapping("/authUser/unAllocatedList")
+    @ResponseBody
+    public TableDataInfo unAllocatedList()
+    {
+        System.out.println("NaArrangementController.unAllocatedList");
+
+        startPage();
+        List<SysUser> list = arrMedicalService.SelectUnAllocatedList();
+        return getDataTable(list);
+    }
+
+    /**
+     * 批量选择用户授权
+     */
+    @RequiresPermissions("system:post:edit")
+    @Log(title = "角色管理", businessType = BusinessType.GRANT)
+    @PostMapping("/authUser/saveAll")
+    @ResponseBody
+    public AjaxResult saveAuthUserAll(Long arrId, String userIds)
+    {
+        System.out.println("NaArrangementController.selectAuthUserAll");
+
+        return  toAjax(arrMedicalService.saveAuthUserAll(arrId,userIds));
+    }
 }

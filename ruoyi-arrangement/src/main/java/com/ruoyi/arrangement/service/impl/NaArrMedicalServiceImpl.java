@@ -54,6 +54,19 @@ public class NaArrMedicalServiceImpl implements INaArrMedicalService
     public List<NaArrMedical> selectNaArrMedicalByMedId(Long medId){
         return naArrMedicalMapper.selectNaArrMedicalByMedId(medId);
     }
+    /**
+     * 查询所有未分配的医护人员
+     *
+     * @return 所有未分配的医护人员
+     */
+    @Override
+    public List<SysUser> SelectUnAllocatedList() {
+        List<SysUser> list = userService.selectUserList(new SysUser());
+        for(NaArrMedical arrMedical:naArrMedicalMapper.selectNaArrMedicalList(new NaArrMedical())){
+            list.remove(userService.selectUserById(arrMedical.getMedId()));
+        }
+        return list;
+    }
 
 
     /**
@@ -78,6 +91,25 @@ public class NaArrMedicalServiceImpl implements INaArrMedicalService
     public int insertNaArrMedical(NaArrMedical naArrMedical)
     {
         return naArrMedicalMapper.insertNaArrMedical(naArrMedical);
+    }
+    /**
+     * 批量 新增任务与医护人员关联
+     *
+     * @param arrId 任务Id
+     * @param userIds 医护人员Id序列
+     * @return 结果
+     */
+    @Override
+    public Integer saveAuthUserAll(Long arrId, String userIds) {
+        Integer num=0;
+        for(String userId:userIds.split(",")){
+            NaArrMedical arrMedical = new NaArrMedical();
+            arrMedical.setArrId(arrId);
+            arrMedical.setMedId(Long.parseLong(userId));
+            naArrMedicalMapper.insertNaArrMedical(arrMedical);
+            num+=1;
+        }
+        return num;
     }
 
     /**

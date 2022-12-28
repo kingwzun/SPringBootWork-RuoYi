@@ -27,8 +27,12 @@ public interface INaArrMedicalService
      * @return 任务与医护人员关联
      */
     public List<NaArrMedical> selectNaArrMedicalByMedId(Long medId);
-
-
+    /**
+     * 查询所有未分配的医护人员
+     *
+     * @return 所有未分配的医护人员
+     */
+    List<SysUser> SelectUnAllocatedList();
     /**
      * 查询任务与医护人员关联列表
      * 
@@ -44,7 +48,14 @@ public interface INaArrMedicalService
      * @return 结果
      */
     public int insertNaArrMedical(NaArrMedical naArrMedical);
-
+    /**
+     * 批量 新增任务与医护人员关联
+     *
+     * @param arrId 任务Id
+     * @param userIds 医护人员Id序列
+     * @return 结果
+     */
+    Integer saveAuthUserAll(Long arrId, String userIds);
     /**
      * 修改任务与医护人员关联
      * 
@@ -62,4 +73,7 @@ public interface INaArrMedicalService
      * @return 结果
      */
     public int deleteNaArrMedical(NaArrMedical arrMedical);
+
+
+
 }
