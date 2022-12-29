@@ -83,16 +83,17 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-arrangement</artifactId>
         </dependency>
-        <!-- 任务和医护人员对照模块-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-arrMedical</artifactId>
-        </dependency>
 
             <!-- 站点 和医生 关系模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-userPost</artifactId>
+        </dependency>
+
+        <!-- 检测点模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-point</artifactId>
         </dependency>
 </dependencies>
     <build>

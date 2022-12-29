@@ -260,6 +260,12 @@
                 <artifactId>ruoyi-arrMedical</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+            <!-- 检测点模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-point</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -274,7 +280,7 @@
         <module>ruoyi-userPost</module>
         <module>ruoyi-laboratory</module>
         <module>ruoyi-arrangement</module>
-        <module>ruoyi-arrMedical</module>
+        <module>ruoyi-point</module>
 
     </modules>
     <packaging>pom</packaging>

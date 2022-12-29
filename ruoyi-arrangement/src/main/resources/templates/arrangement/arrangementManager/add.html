@@ -3,11 +3,14 @@
 <head>
     <th:block th:include="include :: header('新增任务安排')" />
     <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: select2-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-arrangementManager-add">
-            <div class="form-group">    
+<!--            <p name="deliveryId" type="hidden" id="deliveryId" > </p>-->
+            <input name="deliveryId" type="hidden" id="deliveryId" >
+            <div class="form-group">
                 <label class="col-sm-3 control-label is-required">检测时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
@@ -22,28 +25,59 @@
                     <input name="arrAddress" class="form-control" type="text" required>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">检测点ID：</label>
+
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label is-required">检测点ID：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="pointId" class="form-control" type="text" required>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">检测点：</label>
                 <div class="col-sm-8">
-                    <input name="pointId" class="form-control" type="text" required>
+                    <select name="pointId" id="pointId" class="form-control" >
+                    <option th:each="point:${points}" th:value="${point.pointId}" th:text="${point.pointName}" th:disabled="${point.status == '1'}"></option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">物流人员ID：</label>
+
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label is-required">物流人员ID：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="deliveryId" onclick="selectDelivery()"  class="form-control" type="text" required>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">物流人员：</label>
                 <div class="col-sm-8">
-                    <input name="deliveryId" class="form-control" type="text" required>
+<!--                    <p id="deliveryName" onclick="selectDelivery()"  class="form-control" required > </p>-->
+                    <input name="deliveryName" id="deliveryName" onclick="selectDelivery()"   class="form-control" type="text" required>
+<!--                    <p id="userids"> </p>-->
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">实验室ID：</label>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">实验室：</label>
                 <div class="col-sm-8">
-                    <input name="laboratoryId" class="form-control" type="text" required>
+                    <select name="laboratoryId" id="laboratoryId" class="form-control" >
+                        <option th:each="laboratory : ${laboratories}" th:value="${laboratory.labId}" th:text="${laboratory.labName}"></option>
+                    </select>
                 </div>
             </div>
+
+
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label is-required">实验室ID：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="laboratoryId" class="form-control" type="text" required>-->
+<!--                </div>-->
+<!--            </div>-->
         </form>
     </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: select2-js" />
     <script th:inline="javascript">
         var prefix = ctx + "arrangement/arrangementManager"
         $("#form-arrangementManager-add").validate({
@@ -61,6 +95,42 @@
             minView: "month",
             autoclose: true
         });
+
+        /* 选择物流人员 */
+
+        function selectDelivery() {
+            var deliveryId = $("#deliveryId").val();
+            var deliveryName =$("#deliveryName").val();
+            console.log(deliveryId)
+            console.log(deliveryName)
+            var url = prefix + '/authDelivery';
+            var options = {
+                title: '选择物流人员',
+                url: url,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var rows = layero.find("iframe")[0].contentWindow.getSelections();
+            var deliveryName = layero.find("iframe")[0].contentWindow.getDeliveryName();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            };
+            if (rows.length > 1) {
+                $.modal.alertWarning("请只选择一条记录");
+                return;
+            }
+            // $('#userids').html('我是通过方式二来的：' + rows.join())
+            console.log(rows)
+            console.log(rows.join())
+            console.log(deliveryName.join())
+            // $("#deliveryId").html(rows.join());
+            $("#deliveryName").val(deliveryName.join());
+            $("#deliveryId").val(rows.join());
+            $.modal.close(index);
+        }
     </script>
 </body>
 </html>

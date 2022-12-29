@@ -74,6 +74,10 @@ public interface INaArrMedicalService
      */
     public int deleteNaArrMedical(NaArrMedical arrMedical);
 
-
-
+    /**
+     * 查询所有的物流人员
+     *
+     * @return 查询所有的物流人员
+     */
+    List<SysUser> selectDeliveryList();
 }

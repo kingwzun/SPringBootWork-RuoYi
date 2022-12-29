@@ -6,6 +6,12 @@ import java.util.List;
 import com.ruoyi.arrangement.domain.NaArrMedical;
 import com.ruoyi.arrangement.service.INaArrMedicalService;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.laboratory.domain.NaLaboratory;
+import com.ruoyi.laboratory.service.INaLaboratoryService;
+import com.ruoyi.point.domain.NaPoint;
+import com.ruoyi.point.service.INaPointService;
+import com.ruoyi.system.domain.SysPost;
+import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +47,12 @@ public class NaArrangementController extends BaseController
     private INaArrangementService naArrangementService;
     @Autowired
     private INaArrMedicalService arrMedicalService;
+    @Autowired
+    private INaLaboratoryService laboratoryService;
+    @Autowired
+    private INaPointService pointService;
+    @Autowired
+    private  ISysPostService postService;
     @RequiresPermissions("arrangement:arrangementManager:view")
     @GetMapping()
     public String arrangementManager()
@@ -79,8 +91,12 @@ public class NaArrangementController extends BaseController
      * 新增任务安排
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
+        mmap.put("laboratories",laboratoryService.selectNaLaboratoryList(new NaLaboratory()));
+        mmap.put("points", pointService.selectNaPointList(new NaPoint()));
+        mmap.put("deliveryId","");
+        mmap.put("deliveryName","");
         return prefix + "/add";
     }
 
@@ -105,6 +121,8 @@ public class NaArrangementController extends BaseController
     {
         NaArrangement naArrangement = naArrangementService.selectNaArrangementByArrId(arrId);
         mmap.put("naArrangement", naArrangement);
+        mmap.put("laboratories",laboratoryService.selectNaLaboratoryList(new NaLaboratory()));
+        mmap.put("points", pointService.selectNaPointList(new NaPoint()));
         return prefix + "/edit";
     }
 
@@ -231,4 +249,50 @@ public class NaArrangementController extends BaseController
 
         return  toAjax(arrMedicalService.saveAuthUserAll(arrId,userIds));
     }
+
+
+    /**
+     * 选择物流人员
+     */
+    @GetMapping("/authDelivery")
+    public String selectDelivery(ModelMap mmap)
+    {
+        System.out.println("NaArrangementController.selectDelivery");
+
+//        mmap.put("arrId",arrId);
+        return prefix + "/selectDelivery";
+    }
+
+    /**
+     * 查询物流人员角色列表
+     */
+    @RequiresPermissions("system:post:list")
+    @PostMapping("/authDelivery/deliveryList")
+    @ResponseBody
+    public TableDataInfo deliveryList()
+    {
+        System.out.println("NaArrangementController.deliveryList");
+
+        startPage();
+
+        List<SysUser> list = arrMedicalService.selectDeliveryList();
+        return getDataTable(list);
+    }
+
+    /**
+     * 批量选择用户授权
+     */
+    @RequiresPermissions("system:post:edit")
+    @Log(title = "角色管理", businessType = BusinessType.GRANT)
+    @PostMapping("/authDelivery/saveDelivery")
+    @ResponseBody
+    public AjaxResult saveDelivery(String deliveryId, String deliveryName,ModelMap mmap)
+    {
+        System.out.println("NaArrangementController.saveDelivery "+deliveryId+" "+deliveryName);
+
+        mmap.put("deliveryId",deliveryId);
+        mmap.put("deliveryName",deliveryName);
+        return  toAjax(1);
+    }
+
 }

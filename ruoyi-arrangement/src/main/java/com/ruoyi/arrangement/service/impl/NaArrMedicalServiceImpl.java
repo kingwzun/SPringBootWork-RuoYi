@@ -136,4 +136,14 @@ public class NaArrMedicalServiceImpl implements INaArrMedicalService
     {
         return naArrMedicalMapper.deleteNaArrMedical(arrMedical);
     }
+    /**
+     * 查询所有的物流人员
+     *
+     * @return 查询所有的物流人员
+     */
+    @Override
+    public List<SysUser> selectDeliveryList() {
+        List<SysUser> list = userService.selectUserList(new SysUser());
+        return list;
+    }
 }

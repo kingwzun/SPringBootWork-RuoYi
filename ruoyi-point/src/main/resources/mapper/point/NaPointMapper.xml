@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.point.mapper.NaPointMapper">
+    
+    <resultMap type="NaPoint" id="NaPointResult">
+        <result property="pointId"    column="point_id"    />
+        <result property="pointName"    column="point_name"    />
+        <result property="pointAddress"    column="point_address"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectNaPointVo">
+        select point_id, point_name, point_address, status, create_by, create_time, update_by, update_time, remark from na_point
+    </sql>
+
+    <select id="selectNaPointList" parameterType="NaPoint" resultMap="NaPointResult">
+        <include refid="selectNaPointVo"/>
+        <where>  
+            <if test="pointName != null  and pointName != ''"> and point_name like concat('%', #{pointName}, '%')</if>
+            <if test="pointAddress != null  and pointAddress != ''"> and point_address = #{pointAddress}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectNaPointByPointId" parameterType="Long" resultMap="NaPointResult">
+        <include refid="selectNaPointVo"/>
+        where point_id = #{pointId}
+    </select>
+        
+    <insert id="insertNaPoint" parameterType="NaPoint" useGeneratedKeys="true" keyProperty="pointId">
+        insert into na_point
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pointName != null and pointName != ''">point_name,</if>
+            <if test="pointAddress != null and pointAddress != ''">point_address,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pointName != null and pointName != ''">#{pointName},</if>
+            <if test="pointAddress != null and pointAddress != ''">#{pointAddress},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNaPoint" parameterType="NaPoint">
+        update na_point
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pointName != null and pointName != ''">point_name = #{pointName},</if>
+            <if test="pointAddress != null and pointAddress != ''">point_address = #{pointAddress},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where point_id = #{pointId}
+    </update>
+
+    <delete id="deleteNaPointByPointId" parameterType="Long">
+        delete from na_point where point_id = #{pointId}
+    </delete>
+
+    <delete id="deleteNaPointByPointIds" parameterType="String">
+        delete from na_point where point_id in 
+        <foreach item="pointId" collection="array" open="(" separator="," close=")">
+            #{pointId}
+        </foreach>
+    </delete>
+
+</mapper>

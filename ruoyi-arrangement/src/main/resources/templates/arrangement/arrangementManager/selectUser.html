@@ -101,6 +101,7 @@
 		/* 添加用户-选择用户-提交 */
 		function submitHandler() {
 			var rows = $.table.selectFirstColumns();
+			console.log(rows)
 			if (rows.length == 0) {
        			$.modal.alertWarning("请至少选择一条记录");
        			return;

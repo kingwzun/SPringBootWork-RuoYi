@@ -23,22 +23,39 @@
                     <input name="arrAddress" th:field="*{arrAddress}" class="form-control" type="text" required>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">检测点ID：</label>
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label is-required">检测点ID：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="pointId" th:field="*{pointId}" class="form-control" type="text" required>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">检测点：</label>
                 <div class="col-sm-8">
-                    <input name="pointId" th:field="*{pointId}" class="form-control" type="text" required>
+                    <select name="pointId" id="pointId" class="form-control" >
+                        <option th:selected="*{pointId}==${point.pointId}" th:each="point:${points}" th:value="${point.pointId}" th:text="${point.pointName}" th:disabled="${point.status == '1'}"></option>
+                    </select>
+                </div>
+            </div>
+            <!--            <div class="form-group">    -->
+            <!--                <label class="col-sm-3 control-label is-required">实验室ID：</label>-->
+            <!--                <div class="col-sm-8">-->
+            <!--                    <input name="laboratoryId" th:field="*{laboratoryId}" class="form-control" type="text" required>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">实验室：</label>
+                <div class="col-sm-8">
+                    <select name="laboratoryId" id="laboratoryId" class="form-control" >
+                        <option th:selected="*{laboratoryId}==${lab.labId}" th:each="lab:${laboratories}" th:value="${lab.labId}" th:text="${lab.labName}" ></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label is-required">物流人员ID：</label>
                 <div class="col-sm-8">
                     <input name="deliveryId" th:field="*{deliveryId}" class="form-control" type="text" required>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">实验室ID：</label>
-                <div class="col-sm-8">
-                    <input name="laboratoryId" th:field="*{laboratoryId}" class="form-control" type="text" required>
                 </div>
             </div>
         </form>
