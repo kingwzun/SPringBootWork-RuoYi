@@ -53,6 +53,8 @@ public class NaArrangementController extends BaseController
     private INaPointService pointService;
     @Autowired
     private  ISysPostService postService;
+    @Autowired
+    private ISysUserService userService;
     @RequiresPermissions("arrangement:arrangementManager:view")
     @GetMapping()
     public String arrangementManager()
@@ -119,8 +121,20 @@ public class NaArrangementController extends BaseController
     @GetMapping("/edit/{arrId}")
     public String edit(@PathVariable("arrId") Long arrId, ModelMap mmap)
     {
+        System.out.println("NaArrangementController.edit");
         NaArrangement naArrangement = naArrangementService.selectNaArrangementByArrId(arrId);
         mmap.put("naArrangement", naArrangement);
+        String deliveryName="";
+        SysUser sysUser = userService.selectUserById(naArrangement.getDeliveryId());
+        if (sysUser==null){
+            deliveryName="未查询到物流人员";
+        }
+        else {
+            deliveryName=sysUser.getUserName();
+        }
+
+
+        mmap.put("deliveryName",deliveryName);
         mmap.put("laboratories",laboratoryService.selectNaLaboratoryList(new NaLaboratory()));
         mmap.put("points", pointService.selectNaPointList(new NaPoint()));
         return prefix + "/edit";
@@ -135,6 +149,7 @@ public class NaArrangementController extends BaseController
     @ResponseBody
     public AjaxResult editSave(NaArrangement naArrangement)
     {
+        System.out.println("NaArrangementController.editSave");
         return toAjax(naArrangementService.updateNaArrangement(naArrangement));
     }
 
