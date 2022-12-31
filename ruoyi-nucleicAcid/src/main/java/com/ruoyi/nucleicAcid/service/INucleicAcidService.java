@@ -2,6 +2,7 @@ package com.ruoyi.nucleicAcid.service;
 
 import java.util.List;
 import com.ruoyi.nucleicAcid.domain.NucleicAcid;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 核酸信息Service接口
@@ -42,6 +43,14 @@ public interface INucleicAcidService
      * @return 结果
      */
     public int updateNucleicAcid(NucleicAcid nucleicAcid);
+    /**
+     * 修改核酸结果
+     *
+     * @param nucleicAcid 核酸信息
+     * @return 结果
+     */
+    @Transactional
+    int updateNaResult(NucleicAcid nucleicAcid);
 
     /**
      * 批量删除核酸信息

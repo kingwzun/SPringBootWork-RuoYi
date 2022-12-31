@@ -79,6 +79,19 @@ public class NucleicAcidServiceImpl implements INucleicAcidService
     }
 
     /**
+     * 修改核酸结果
+     *
+     * @param nucleicAcid 核酸信息
+     * @return 结果
+     */
+    @Transactional
+    @Override
+    public int updateNaResult(NucleicAcid nucleicAcid)
+    {
+        return nucleicAcidMapper.updateNucleicAcid(nucleicAcid);
+    }
+
+    /**
      * 批量删除核酸信息
      *
      * @param naIds 需要删除的核酸信息主键

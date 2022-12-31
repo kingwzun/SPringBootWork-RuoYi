@@ -62,9 +62,9 @@
         var editFlag = [[${@permission.hasPermi('nucleicAcid:acid:edit')}]];
         var removeFlag = [[${@permission.hasPermi('nucleicAcid:acid:remove')}]];
         var detailFlag = [[${@permission.hasPermi('nucleicAcid:acid:detail')}]];//用于查看受检者详细信息
-
+        var editResultFlag= [[${@permission.hasPermi('nucleicAcid:acid:editResult')}]];//用于结果管理
         var naTypeDatas = [[${@dict.getType('na_type')}]];
-
+        var naResultDatas = [[${@dict.getType('na_result_type')}]];
         var prefix = ctx + "nucleicAcid/acid";
 
         $(function() {
@@ -87,10 +87,17 @@
                     field: 'naTime',
                     title: '核酸时间'
                 },
-                {
-                    field: 'naResult',
-                    title: '核酸结果'
-                },
+                // {
+                //     field: 'naResult',
+                //     title: '核酸结果'
+                // },
+                    {
+                        field: 'naResult',
+                        title: '核酸结果',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(naResultDatas, value);
+                        }
+                    },
                 {
                     field: 'deptName',
                     title: '核酸区域'
@@ -110,6 +117,8 @@
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.naId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         //用于查看受检者详细信息
                         actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detailDataColumn(\'' + row.naId + '\')"><i class="fa fa-search"></i>详情</a> ');
+                        //用于修改结果
+                        actions.push('<a class="btn btn-success btn-xs ' + editResultFlag + '" href="javascript:void(0)" onclick="editResult(\'' + row.naId + '\')"><i class="fa fa-search"></i>结果</a> ')
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.naId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
@@ -123,6 +132,14 @@
          */
         function detailDataColumn(id){
             $.modal.open("受检人员信息","nucleicAcid/acid/detail/"+id,"1000","650");
+
+        };
+
+        /**
+         * 结果管理
+         */
+        function editResult(id){
+            $.modal.open("结果管理","nucleicAcid/acid/editResult/"+id);
 
         };
     </script>

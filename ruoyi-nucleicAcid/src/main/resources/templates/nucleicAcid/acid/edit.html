@@ -24,18 +24,25 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">核酸时间：</label>
                 <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="naTime" th:value="${#dates.format(nucleicAcid.naTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
+                    <input readonly="true" th:value="${#dates.format(nucleicAcid.naTime, 'yyyy-MM-dd HH:mm:ss')}" name="naTime" class="form-control" placeholder="yyyy-MM-dd HH:mm:ss" type="text">
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">核酸结果：</label>
-                <div class="col-sm-8">
-                    <input name="naResult" th:field="*{naResult}" class="form-control" type="text">
-                </div>
-            </div>
+
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-3 control-label">核酸时间：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <div class="input-group date">-->
+<!--                        <input name="naTime" th:value="${#dates.format(nucleicAcid.naTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">-->
+<!--                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form-group">    -->
+<!--                <label class="col-sm-3 control-label">核酸结果：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="naResult" th:field="*{naResult}" class="form-control" type="text">-->
+<!--                </div>-->
+<!--            </div>-->
 <!--            <div class="form-group">-->
 <!--                <label class="col-sm-3 control-label">核酸区域：</label>-->
 <!--                <div class="col-sm-8">-->
@@ -100,11 +107,11 @@
             }
         }
 
-        $("input[name='naTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
+        // $("input[name='naTime']").datetimepicker({
+        //     format: "yyyy-mm-dd",
+        //     minView: "month",
+        //     autoclose: true
+        // });
 
         $(function() {
             var options = {
@@ -167,32 +174,32 @@
             }
             sub.addRow(row);
         }
-        /* 用户管理-修改-选择部门树 */
-        function selectDeptTree() {
-            var deptId = $.common.isEmpty($("#treeId").val()) ? "100" : $("#treeId").val();
-            var url = ctx + "system/user/selectDeptTree/" + deptId;
-            var options = {
-                title: '选择部门',
-                width: "380",
-                url: url,
-                callBack: doSubmit
-            };
-            $.modal.openOptions(options);
-        }
-
-        function doSubmit(index, layero){
-            var body = $.modal.getChildFrame(index);
-            $("#treeId").val(body.find('#treeId').val());
-            $("#treeName").val(body.find('#treeName').val());
-            $.modal.close(index);
-        }
-
-        $(function() {
-            $('#post').select2({
-                placeholder: "请选择岗位",
-                allowClear: true
-            });
-        })
+        // /* 用户管理-修改-选择部门树 */
+        // function selectDeptTree() {
+        //     var deptId = $.common.isEmpty($("#treeId").val()) ? "100" : $("#treeId").val();
+        //     var url = ctx + "system/user/selectDeptTree/" + deptId;
+        //     var options = {
+        //         title: '选择部门',
+        //         width: "380",
+        //         url: url,
+        //         callBack: doSubmit
+        //     };
+        //     $.modal.openOptions(options);
+        // }
+        //
+        // function doSubmit(index, layero){
+        //     var body = $.modal.getChildFrame(index);
+        //     $("#treeId").val(body.find('#treeId').val());
+        //     $("#treeName").val(body.find('#treeName').val());
+        //     $.modal.close(index);
+        // }
+        //
+        // $(function() {
+        //     $('#post').select2({
+        //         placeholder: "请选择岗位",
+        //         allowClear: true
+        //     });
+        // })
     </script>
 </body>
 </html>

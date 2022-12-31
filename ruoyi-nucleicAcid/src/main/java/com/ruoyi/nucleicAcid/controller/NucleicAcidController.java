@@ -1,5 +1,7 @@
 package com.ruoyi.nucleicAcid.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -86,11 +88,18 @@ public class NucleicAcidController extends BaseController {
      */
     @GetMapping("/add")
     public String add( ModelMap mmap) {
+        System.out.println("NucleicAcidController.add");
         // 取身份信息
         SysUser user = getSysUser();
         SysDept sysDept = iSysDeptService.selectDeptById(user.getDeptId());
         mmap.put("deptName", sysDept.getDeptName());
         mmap.put("deptId", user.getDeptId());
+
+        Date date = new Date();
+        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(dateFormat.format(date));
+
+        mmap.put("naTime",date);
         return prefix + "/add";
     }
 
@@ -102,6 +111,8 @@ public class NucleicAcidController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(NucleicAcid nucleicAcid) {
+        System.out.println("NucleicAcidController.addSave");
+
         List<NaPersonnel> naPersonnelList = nucleicAcid.getNaPersonnelList();
         if(naPersonnelList!=null){
             for(int i=0;i<naPersonnelList.size();i++) {
@@ -142,6 +153,7 @@ public class NucleicAcidController extends BaseController {
         return prefix + "/edit";
     }
 
+
     /**
      * 修改保存核酸信息
      */
@@ -169,6 +181,31 @@ public class NucleicAcidController extends BaseController {
         }
         return toAjax(nucleicAcidService.updateNucleicAcid(nucleicAcid));
     }
+    /**
+     * 录入核酸结果
+     */
+    @RequiresPermissions("nucleicAcid:acid:editResult")
+    @GetMapping("/editResult/{naId}")
+    public String editResult(@PathVariable("naId") Long naId, ModelMap mmap) {
+        NucleicAcid nucleicAcid = nucleicAcidService.selectNucleicAcidByNaId(naId);
+        mmap.put("nucleicAcid", nucleicAcid);
+        SysDept sysDept = iSysDeptService.selectDeptById(nucleicAcid.getDeptId());
+        mmap.put("deptName", sysDept.getDeptName());
+
+        return prefix + "/editResult";
+    }
+
+    /**
+     * 修改保存核酸结果
+     */
+    @RequiresPermissions("nucleicAcid:acid:editResult")
+    @Log(title = "核酸信息", businessType = BusinessType.UPDATE)
+    @PostMapping("/editResult")
+    @ResponseBody
+    public AjaxResult editResultSave(NucleicAcid nucleicAcid) {
+        return toAjax(nucleicAcidService.updateNaResult(nucleicAcid));
+    }
+
 
     /**
      * 删除核酸信息
