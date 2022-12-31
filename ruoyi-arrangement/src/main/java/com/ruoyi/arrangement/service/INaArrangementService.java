@@ -2,6 +2,8 @@ package com.ruoyi.arrangement.service;
 
 import java.util.List;
 import com.ruoyi.arrangement.domain.NaArrangement;
+import com.ruoyi.arrangement.domain.vo.NaArrangementVO;
+import com.ruoyi.common.core.domain.entity.SysRole;
 
 /**
  * 任务安排Service接口
@@ -27,6 +29,11 @@ public interface INaArrangementService
      */
     public List<NaArrangement> selectNaArrangementList(NaArrangement naArrangement);
 
+
+    /**
+     * 查询任务安排列表
+     */
+    public List<NaArrangementVO> selectNaArrangementVOList(NaArrangement naArrangement);
     /**
      * 新增任务安排
      * 
@@ -58,4 +65,9 @@ public interface INaArrangementService
      * @return 结果
      */
     public int deleteNaArrangementByArrId(Long arrId);
+    /**
+     * 角色状态修改
+     */
+    public Integer changeStatus(NaArrangement naArrangement);
+
 }

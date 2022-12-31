@@ -88,21 +88,29 @@
                     field: 'arrAddress',
                     title: '检测区域'
                 },
+                // {
+                //     field: 'arrStatus',
+                //     title: '状态'
+                // },
+                    {
+                        visible: editFlag == 'hidden' ? false : true,
+                        title: '任务状态',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            return statusTools(row);
+                        }
+                    },
                 {
-                    field: 'arrStatus',
-                    title: '状态'
+                    field: 'pointName',
+                    title: '检测点'
                 },
                 {
-                    field: 'pointId',
-                    title: '检测点ID'
+                    field: 'deliveryName',
+                    title: '物流人员'
                 },
                 {
-                    field: 'deliveryId',
-                    title: '物流人员ID'
-                },
-                {
-                    field: 'laboratoryId',
-                    title: '实验室ID'
+                    field: 'laboratoryName',
+                    title: '实验室'
                 },
                 {
                     title: '操作',
@@ -128,6 +136,30 @@
             $.modal.openTab("分配医护人员",url);
 
         };
+
+
+        /* 角色状态显示 */
+        function statusTools(row) {
+            if (row.arrStatus == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.arrId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.arrId + '\')"></i> ';
+            }
+        }
+
+        /* 角色管理-停用 */
+        function disable(arrId) {
+            $.modal.confirm("确认要停用角色吗？", function() {
+                $.operate.post(prefix + "/changeStatus", { "arrId": arrId, "arrStatus": 1 });
+            })
+        }
+
+        /* 角色管理启用 */
+        function enable(arrId) {
+            $.modal.confirm("确认要启用角色吗？", function() {
+                $.operate.post(prefix + "/changeStatus", { "arrId": arrId, "arrStatus": 0 });
+            })
+        }
     </script>
 </body>
 </html>

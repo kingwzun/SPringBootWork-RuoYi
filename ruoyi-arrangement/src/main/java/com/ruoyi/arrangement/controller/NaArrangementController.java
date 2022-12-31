@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ruoyi.arrangement.domain.NaArrMedical;
+import com.ruoyi.arrangement.domain.vo.NaArrangementVO;
 import com.ruoyi.arrangement.service.INaArrMedicalService;
+import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.laboratory.domain.NaLaboratory;
 import com.ruoyi.laboratory.service.INaLaboratoryService;
@@ -71,7 +73,8 @@ public class NaArrangementController extends BaseController
     public TableDataInfo list(NaArrangement naArrangement)
     {
         startPage();
-        List<NaArrangement> list = naArrangementService.selectNaArrangementList(naArrangement);
+//        List<NaArrangement> arrangements =
+        List<NaArrangementVO> list=naArrangementService.selectNaArrangementVOList(naArrangement);
         return getDataTable(list);
     }
 
@@ -294,20 +297,32 @@ public class NaArrangementController extends BaseController
         return getDataTable(list);
     }
 
+//    /**
+//     *
+//     */
+//    @RequiresPermissions("system:post:edit")
+//    @Log(title = "角色管理", businessType = BusinessType.GRANT)
+//    @PostMapping("/authDelivery/saveDelivery")
+//    @ResponseBody
+//    public AjaxResult saveDelivery(String deliveryId, String deliveryName,ModelMap mmap)
+//    {
+//        System.out.println("NaArrangementController.saveDelivery "+deliveryId+" "+deliveryName);
+//
+//        mmap.put("deliveryId",deliveryId);
+//        mmap.put("deliveryName",deliveryName);
+//        return  toAjax(1);
+//    }
+//
     /**
-     * 批量选择用户授权
+     * 角色状态修改
      */
-    @RequiresPermissions("system:post:edit")
-    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-    @PostMapping("/authDelivery/saveDelivery")
+    @Log(title = "角色管理", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("system:role:edit")
+    @PostMapping("/changeStatus")
     @ResponseBody
-    public AjaxResult saveDelivery(String deliveryId, String deliveryName,ModelMap mmap)
+    public AjaxResult changeStatus(NaArrangement naArrangement)
     {
-        System.out.println("NaArrangementController.saveDelivery "+deliveryId+" "+deliveryName);
-
-        mmap.put("deliveryId",deliveryId);
-        mmap.put("deliveryName",deliveryName);
-        return  toAjax(1);
+        System.out.println("NaArrangementController.changeStatus");
+        return toAjax(naArrangementService.changeStatus(naArrangement));
     }
-
 }
