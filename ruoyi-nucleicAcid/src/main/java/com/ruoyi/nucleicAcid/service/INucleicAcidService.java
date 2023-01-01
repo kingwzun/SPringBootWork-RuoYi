@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 核酸信息Service接口
  *
  * @author ruoyi
- * @date 2022-11-25
+ * @date 2022-12-31
  */
 public interface INucleicAcidService
 {

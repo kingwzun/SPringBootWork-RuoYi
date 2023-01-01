@@ -3,6 +3,7 @@ package com.ruoyi.nucleicAcid.domain;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -12,7 +13,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 核酸信息对象 nucleic_acid
  *
  * @author ruoyi
- * @date 2022-11-25
+ * @date 2022-12-31
  */
 public class NucleicAcid extends BaseEntity
 {
@@ -22,24 +23,42 @@ public class NucleicAcid extends BaseEntity
     private Long naId;
 
     /** 核酸时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "核酸时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "核酸时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date naTime;
 
-    /** 核酸结果 */
-    @Excel(name = "核酸结果")
-    private Long naResult;
-
-    /** 核酸区域ID */
-    private Long deptId;
-
-    /** 核酸区域 */
-    @Excel(name = "核酸区域")
-    private String deptName;
+    /** 混样方式(0混管，1单管) */
+    @Excel(name = "混样方式(0混管，1单管)")
+    private Integer naMixType;
 
     /** 核酸类型 */
     @Excel(name = "核酸类型")
-    private Long naType;
+    private Integer naType;
+
+    /** 试管编号 */
+    @Excel(name = "试管编号")
+    private Long tubeId;
+
+    /** 检测点ID */
+    @Excel(name = "检测点ID")
+    private Long pointId;
+
+    /** 检测点名称 */
+    @Excel(name = "检测点名称")
+    private String pointName;
+
+    /** 核酸结果(0未录入，1阴性，2阳性) */
+    @Excel(name = "核酸结果(0未录入，1阴性，2阳性)")
+    private Long naResult;
+
+    /** 结果最后一次修改时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "结果最后一次修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date naResultTime;
+
+    /** 物流信息ID */
+    @Excel(name = "物流信息ID")
+    private Long logiId;
 
     /** 信息人员对照表信息 */
     private List<NaPersonnel> naPersonnelList;
@@ -62,6 +81,51 @@ public class NucleicAcid extends BaseEntity
     {
         return naTime;
     }
+    public void setNaMixType(Integer naMixType)
+    {
+        this.naMixType = naMixType;
+    }
+
+    public Integer getNaMixType()
+    {
+        return naMixType;
+    }
+    public void setNaType(Integer naType)
+    {
+        this.naType = naType;
+    }
+
+    public Integer getNaType()
+    {
+        return naType;
+    }
+    public void setTubeId(Long tubeId)
+    {
+        this.tubeId = tubeId;
+    }
+
+    public Long getTubeId()
+    {
+        return tubeId;
+    }
+    public void setPointId(Long pointId)
+    {
+        this.pointId = pointId;
+    }
+
+    public Long getPointId()
+    {
+        return pointId;
+    }
+    public void setPointName(String pointName)
+    {
+        this.pointName = pointName;
+    }
+
+    public String getPointName()
+    {
+        return pointName;
+    }
     public void setNaResult(Long naResult)
     {
         this.naResult = naResult;
@@ -71,32 +135,23 @@ public class NucleicAcid extends BaseEntity
     {
         return naResult;
     }
-    public void setDeptId(Long deptId)
+    public void setNaResultTime(Date naResultTime)
     {
-        this.deptId = deptId;
+        this.naResultTime = naResultTime;
     }
 
-    public Long getDeptId()
+    public Date getNaResultTime()
     {
-        return deptId;
+        return naResultTime;
     }
-    public void setDeptName(String deptName)
+    public void setLogiId(Long logiId)
     {
-        this.deptName = deptName;
-    }
-
-    public String getDeptName()
-    {
-        return deptName;
-    }
-    public void setNaType(Long naType)
-    {
-        this.naType = naType;
+        this.logiId = logiId;
     }
 
-    public Long getNaType()
+    public Long getLogiId()
     {
-        return naType;
+        return logiId;
     }
 
     public List<NaPersonnel> getNaPersonnelList()
@@ -114,10 +169,14 @@ public class NucleicAcid extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
                 .append("naId", getNaId())
                 .append("naTime", getNaTime())
-                .append("naResult", getNaResult())
-                .append("deptId", getDeptId())
-                .append("deptName", getDeptName())
+                .append("naMixType", getNaMixType())
                 .append("naType", getNaType())
+                .append("tubeId", getTubeId())
+                .append("pointId", getPointId())
+                .append("pointName", getPointName())
+                .append("naResult", getNaResult())
+                .append("naResultTime", getNaResultTime())
+                .append("logiId", getLogiId())
                 .append("naPersonnelList", getNaPersonnelList())
                 .toString();
     }

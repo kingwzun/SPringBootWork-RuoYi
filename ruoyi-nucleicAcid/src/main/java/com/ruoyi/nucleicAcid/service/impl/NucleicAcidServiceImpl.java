@@ -16,7 +16,7 @@ import com.ruoyi.common.core.text.Convert;
  * 核酸信息Service业务层处理
  *
  * @author ruoyi
- * @date 2022-11-25
+ * @date 2022-12-31
  */
 @Service
 public class NucleicAcidServiceImpl implements INucleicAcidService

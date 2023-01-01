@@ -22,7 +22,7 @@
         <table class="table table-bordered" id="nucleicAciddetail">
             <tbody>
             <tr><td colspan="9" style="text-align: center;font-size: 20px">
-                <span  th:text="${nucleicAcid.deptName}"></span>
+                <span  th:text="${nucleicAcid.pointName}"></span>
                 <span>受检人员信息&nbsp;</span>
             </td></tr>
 
@@ -67,6 +67,10 @@
                 return str;
             }
         });
+    }
+
+    function submitHandler() {
+        $.modal.close();
     }
 
 </script>

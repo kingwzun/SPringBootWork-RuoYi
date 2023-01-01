@@ -8,7 +8,7 @@ import com.ruoyi.nucleicAcid.domain.NaPersonnel;
  * 核酸信息Mapper接口
  *
  * @author ruoyi
- * @date 2022-11-25
+ * @date 2022-12-31
  */
 public interface NucleicAcidMapper
 {

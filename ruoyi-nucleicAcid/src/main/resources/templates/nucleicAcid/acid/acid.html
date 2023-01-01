@@ -4,80 +4,103 @@
     <th:block th:include="include :: header('核酸信息列表')" />
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <label>核酸时间：</label>
-                                <input type="text" class="time-input" placeholder="请选择核酸时间" name="naTime"/>
-                            </li>
-                            <li>
-                                <label>核酸结果：</label>
-                                <input type="text" name="naResult"/>
-                            </li>
-                            <li>
-                                <label>核酸区域：</label>
-                                <input type="text" name="deptName"/>
-                            </li>
-                            <li>
-                                <label>核酸类型：</label>
-                                <select name="naType" th:with="type=${@dict.getType('na_type')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>核酸时间：</label>
+                            <input type="text" class="time-input" placeholder="请选择核酸时间" name="naTime"/>
+                        </li>
+                        <li>
+                            <label>混样方式：</label>
+                            <select name="naMixType" th:with="type=${@dict.getType('na_mix_type')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>核酸类型：</label>
+                            <select name="naType" th:with="type=${@dict.getType('na_type')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>试管编号：</label>
+                            <input type="text" name="tubeId"/>
+                        </li>
+                        <li>
+                            <label>检测点ID：</label>
+                            <input type="text" name="pointId"/>
+                        </li>
+                        <li>
+                            <label>检测点名称：</label>
+                            <input type="text" name="pointName"/>
+                        </li>
+                        <li>
+                            <label>核酸结果：</label>
+                            <select name="naResult" th:with="type=${@dict.getType('na_result_type')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>物流信息ID：</label>
+                            <input type="text" name="logiId"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="nucleicAcid:acid:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="nucleicAcid:acid:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="nucleicAcid:acid:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="nucleicAcid:acid:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="nucleicAcid:acid:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="nucleicAcid:acid:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="nucleicAcid:acid:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="nucleicAcid:acid:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('nucleicAcid:acid:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('nucleicAcid:acid:remove')}]];
-        var detailFlag = [[${@permission.hasPermi('nucleicAcid:acid:detail')}]];//用于查看受检者详细信息
-        var editResultFlag= [[${@permission.hasPermi('nucleicAcid:acid:editResult')}]];//用于结果管理
-        var naTypeDatas = [[${@dict.getType('na_type')}]];
-        var naResultDatas = [[${@dict.getType('na_result_type')}]];
-        var prefix = ctx + "nucleicAcid/acid";
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('nucleicAcid:acid:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('nucleicAcid:acid:remove')}]];
+    var naMixTypeDatas = [[${@dict.getType('na_mix_type')}]];
+    var detailFlag = [[${@permission.hasPermi('nucleicAcid:acid:detail')}]];//用于查看受检者详细信息
+    var editResultFlag= [[${@permission.hasPermi('nucleicAcid:acid:editResult')}]];//用于结果管理
+    var naTypeDatas = [[${@dict.getType('na_type')}]];
+    var naResultDatas = [[${@dict.getType('na_result_type')}]];
+    var prefix = ctx + "nucleicAcid/acid";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "核酸信息",
-                columns: [{
-                    checkbox: true
-                },
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "核酸信息",
+            columns: [{
+                checkbox: true
+            },
                 {
                     field: 'naId',
                     title: '核酸信息编号',
@@ -87,27 +110,42 @@
                     field: 'naTime',
                     title: '核酸时间'
                 },
-                // {
-                //     field: 'naResult',
-                //     title: '核酸结果'
-                // },
-                    {
-                        field: 'naResult',
-                        title: '核酸结果',
-                        formatter: function(value, row, index) {
-                            return $.table.selectDictLabel(naResultDatas, value);
-                        }
-                    },
                 {
-                    field: 'deptName',
-                    title: '核酸区域'
+                    field: 'naMixType',
+                    title: '混样方式',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(naMixTypeDatas, value);
+                    }
                 },
                 {
                     field: 'naType',
                     title: '核酸类型',
                     formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(naTypeDatas, value);
+                        return $.table.selectDictLabel(naTypeDatas, value);
                     }
+                },
+                {
+                    field: 'tubeId',
+                    title: '试管编号'
+                },
+                {
+                    field: 'pointId',
+                    title: '检测点ID'
+                },
+                {
+                    field: 'pointName',
+                    title: '检测点名称'
+                },
+                {
+                    field: 'naResult',
+                    title: '核酸结果',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(naResultDatas, value);
+                    }
+                },
+                {
+                    field: 'logiId',
+                    title: '物流信息ID'
                 },
                 {
                     title: '操作',
@@ -123,25 +161,25 @@
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
-
-        /**
-         * 记录详情
-         */
-        function detailDataColumn(id){
-            $.modal.open("受检人员信息","nucleicAcid/acid/detail/"+id,"1000","650");
-
         };
+        $.table.init(options);
+    });
 
-        /**
-         * 结果管理
-         */
-        function editResult(id){
-            $.modal.open("结果管理","nucleicAcid/acid/editResult/"+id);
+    /**
+     * 记录详情
+     */
+    function detailDataColumn(id){
+        $.modal.open("受检人员信息","nucleicAcid/acid/detail/"+id,"1000","650");
 
-        };
-    </script>
+    };
+
+    /**
+     * 结果管理
+     */
+    function editResult(id){
+        $.modal.open("结果管理","nucleicAcid/acid/editResult/"+id);
+
+    };
+</script>
 </body>
 </html>

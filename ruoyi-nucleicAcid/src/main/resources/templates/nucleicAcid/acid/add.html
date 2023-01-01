@@ -8,45 +8,28 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-acid-add">
         <h4 class="form-header h4">核酸信息</h4>
+        <input  name="pointId" type="hidden" class="form-control" >
+
         <div class="form-group">
-            <label class="col-sm-3 control-label">核酸区域：</label>
+            <label class="col-sm-3 control-label">检测点名称：</label>
             <div class="col-sm-8">
-                <input   disabled="" name="deptName" th:placeholder="${deptName}" class="form-control" type="text">
+                <input readonly="true" name="pointName" th:value="${pointName}" class="form-control" type="text">
             </div>
         </div>
-<!--        <input name="naId" th:field="${naId}" type="hidden">-->
         <div class="form-group">
             <label class="col-sm-3 control-label">核酸时间：</label>
             <div class="col-sm-8">
-                    <input readonly="true" th:value="${#dates.format(naTime, 'yyyy-MM-dd HH:mm:ss')}" name="naTime" class="form-control" placeholder="yyyy-MM-dd HH:mm:ss" type="text">
+                <input readonly="true" th:value="${#dates.format(naTime, 'yyyy-MM-dd HH:mm:ss')}" name="naTime" class="form-control" placeholder="yyyy-MM-dd HH:mm:ss" type="text">
             </div>
         </div>
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label">核酸结果：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="naResult" class="form-control" type="text">-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--                    <div class="form-group">-->
-<!--                        <label class="col-sm-3 control-label">核酸区域：</label>-->
-<!--                        <div class="col-sm-8">-->
-<!--                            <input name="deptId" class="form-control" type="text">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="col-sm-6">-->
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label">核酸区域：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <div class="input-group">-->
-<!--                    <input name="deptName" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请选择核酸区域" class="form-control">-->
-<!--                    <span class="input-group-addon"><i class="fa fa-search"></i></span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-        <!--            </div>-->
-        <input name="deptId" type="hidden" id="treeId"/>
-
+        <div class="form-group">
+            <label class="col-sm-3 control-label">混样方式：</label>
+            <div class="col-sm-8">
+                <select name="naMixType" class="form-control m-b" th:with="type=${@dict.getType('na_mix_type')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">核酸类型：</label>
             <div class="col-sm-8">
@@ -55,11 +38,36 @@
                 </select>
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">试管编号：</label>
+            <div class="col-sm-8">
+                <input name="tubeId" class="form-control" type="text">
+            </div>
+        </div>
 
-
-
-
-
+<!--        <div class="form-group">-->
+<!--            <label class="col-sm-3 control-label">核酸结果(0未录入，1阴性，2阳性)：</label>-->
+<!--            <div class="col-sm-8">-->
+<!--                <select name="naResult" class="form-control m-b" th:with="type=${@dict.getType('na_result_type')}">-->
+<!--                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            <label class="col-sm-3 control-label">结果最后一次修改时间：</label>-->
+<!--            <div class="col-sm-8">-->
+<!--                <div class="input-group date">-->
+<!--                    <input name="naResultTime" class="form-control" placeholder="yyyy-MM-dd" type="text">-->
+<!--                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            <label class="col-sm-3 control-label">物流信息ID：</label>-->
+<!--            <div class="col-sm-8">-->
+<!--                <input name="logiId" class="form-control" type="text">-->
+<!--            </div>-->
+<!--        </div>-->
         <h4 class="form-header h4">信息人员对照表信息</h4>
         <div class="row">
             <div class="col-sm-12">
@@ -78,29 +86,6 @@
     var prefix = ctx + "nucleicAcid/acid"
     var perIdentityTypeDatas = [[${@dict.getType('identity_type')}]];
     $("#form-acid-add").validate({
-        // onkeyup: false,
-        // rules:{
-        //     perIdentity:{
-        //         remote: {
-        //             url: prefix + "/checkPerIdentity",
-        //             type: "post",
-        //             dataType: "json",
-        //             data: {
-        //                 "perIdentity": function() {
-        //                     return $.common.trim($("#perIdentity").val());
-        //                 }
-        //             },
-        //             dataFilter: function(data, type) {
-        //                 return $.validate.unique(data);
-        //             }
-        //         }
-        //     },
-        // },
-        // messages: {
-        //     "loginName": {
-        //         remote: "用户不存在"
-        //     }
-        // },
         focusCleanup: true
     });
 
@@ -109,8 +94,14 @@
             $.operate.save(prefix + "/add", $('#form-acid-add').serialize());
         }
     }
-    //
+
     // $("input[name='naTime']").datetimepicker({
+    //     format: "yyyy-mm-dd",
+    //     minView: "month",
+    //     autoclose: true
+    // });
+    //
+    // $("input[name='naResultTime']").datetimepicker({
     //     format: "yyyy-mm-dd",
     //     minView: "month",
     //     autoclose: true
@@ -177,34 +168,6 @@
         }
         sub.addRow(row);
     }
-
-    // /* 用户管理-新增-选择部门树 */
-    // function selectDeptTree() {
-    //     var treeId = $("#treeId").val();
-    //     var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
-    //     var url = ctx + "system/user/selectDeptTree/" + deptId;
-    //     var options = {
-    //         title: '选择部门',
-    //         width: "380",
-    //         url: url,
-    //         callBack: doSubmit
-    //     };
-    //     $.modal.openOptions(options);
-    // }
-    //
-    // function doSubmit(index, layero){
-    //     var body = $.modal.getChildFrame(index);
-    //     $("#treeId").val(body.find('#treeId').val());
-    //     $("#treeName").val(body.find('#treeName').val());
-    //     $.modal.close(index);
-    // }
-    //
-    // $(function() {
-    //     $('#post').select2({
-    //         placeholder: "请选择岗位",
-    //         allowClear: true
-    //     });
-    // })
 </script>
 </body>
 </html>
