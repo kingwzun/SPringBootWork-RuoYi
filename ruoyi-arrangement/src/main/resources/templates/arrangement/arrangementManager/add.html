@@ -60,9 +60,6 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label is-required">实验室：</label>
                 <div class="col-sm-8">
-                    <select name="laboratoryId" id="laboratoryId" class="form-control" >
-                        <option th:each="laboratory : ${laboratories}" th:value="${laboratory.labId}" th:text="${laboratory.labName}"></option>
-                    </select>
                 </div>
             </div>
 

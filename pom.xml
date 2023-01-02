@@ -266,6 +266,12 @@
                 <artifactId>ruoyi-point</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+            <!-- 物流模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-logistics</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -281,6 +287,7 @@
         <module>ruoyi-laboratory</module>
         <module>ruoyi-arrangement</module>
         <module>ruoyi-point</module>
+        <module>ruoyi-logistics</module>
 
     </modules>
     <packaging>pom</packaging>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.logistics.mapper.NaLogisticsMapper">
+    
+    <resultMap type="NaLogistics" id="NaLogisticsResult">
+        <result property="logiId"    column="logi_id"    />
+        <result property="logiStatus"    column="logi_status"    />
+        <result property="deliveryId"    column="delivery_id"    />
+        <result property="pointId"    column="point_id"    />
+        <result property="logiPointTime"    column="logi_point_time"    />
+        <result property="laboratoryId"    column="laboratory_id"    />
+        <result property="logiLabTime"    column="logi_lab_time"    />
+    </resultMap>
+
+    <resultMap id="NaLogisticsNucleicAcidResult" type="NaLogistics" extends="NaLogisticsResult">
+        <collection property="nucleicAcidList" notNullColumn="sub_na_id" javaType="java.util.List" resultMap="NucleicAcidResult" />
+    </resultMap>
+
+    <resultMap type="NucleicAcid" id="NucleicAcidResult">
+        <result property="naId"    column="sub_na_id"    />
+        <result property="naTime"    column="sub_na_time"    />
+        <result property="naMixType"    column="sub_na_mix_type"    />
+        <result property="naType"    column="sub_na_type"    />
+        <result property="tubeId"    column="sub_tube_id"    />
+        <result property="pointId"    column="sub_point_id"    />
+        <result property="pointName"    column="sub_point_name"    />
+        <result property="naResult"    column="sub_na_result"    />
+        <result property="naResultTime"    column="sub_na_result_time"    />
+        <result property="logiId"    column="sub_logi_id"    />
+    </resultMap>
+
+    <sql id="selectNaLogisticsVo">
+        select logi_id, logi_status, delivery_id, point_id, logi_point_time, laboratory_id, logi_lab_time from na_logistics
+    </sql>
+
+    <select id="selectNaLogisticsList" parameterType="NaLogistics" resultMap="NaLogisticsResult">
+        <include refid="selectNaLogisticsVo"/>
+        <where>  
+            <if test="logiStatus != null "> and logi_status = #{logiStatus}</if>
+            <if test="deliveryId != null "> and delivery_id = #{deliveryId}</if>
+            <if test="pointId != null "> and point_id = #{pointId}</if>
+            <if test="logiPointTime != null "> and logi_point_time = #{logiPointTime}</if>
+            <if test="laboratoryId != null "> and laboratory_id = #{laboratoryId}</if>
+            <if test="logiLabTime != null "> and logi_lab_time = #{logiLabTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectNaLogisticsByLogiId" parameterType="Long" resultMap="NaLogisticsNucleicAcidResult">
+        select a.logi_id, a.logi_status, a.delivery_id, a.point_id, a.logi_point_time, a.laboratory_id, a.logi_lab_time,
+ b.na_id as sub_na_id, b.na_time as sub_na_time, b.na_mix_type as sub_na_mix_type, b.na_type as sub_na_type, b.tube_id as sub_tube_id, b.point_id as sub_point_id, b.point_name as sub_point_name, b.na_result as sub_na_result, b.na_result_time as sub_na_result_time, b.logi_id as sub_logi_id
+        from na_logistics a
+        left join nucleic_acid b on b.na_id = a.logi_id
+        where a.logi_id = #{logiId}
+    </select>
+        
+    <insert id="insertNaLogistics" parameterType="NaLogistics">
+        insert into na_logistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logiId != null">logi_id,</if>
+            <if test="logiStatus != null">logi_status,</if>
+            <if test="deliveryId != null">delivery_id,</if>
+            <if test="pointId != null">point_id,</if>
+            <if test="logiPointTime != null">logi_point_time,</if>
+            <if test="laboratoryId != null">laboratory_id,</if>
+            <if test="logiLabTime != null">logi_lab_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logiId != null">#{logiId},</if>
+            <if test="logiStatus != null">#{logiStatus},</if>
+            <if test="deliveryId != null">#{deliveryId},</if>
+            <if test="pointId != null">#{pointId},</if>
+            <if test="logiPointTime != null">#{logiPointTime},</if>
+            <if test="laboratoryId != null">#{laboratoryId},</if>
+            <if test="logiLabTime != null">#{logiLabTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNaLogistics" parameterType="NaLogistics">
+        update na_logistics
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logiStatus != null">logi_status = #{logiStatus},</if>
+            <if test="deliveryId != null">delivery_id = #{deliveryId},</if>
+            <if test="pointId != null">point_id = #{pointId},</if>
+            <if test="logiPointTime != null">logi_point_time = #{logiPointTime},</if>
+            <if test="laboratoryId != null">laboratory_id = #{laboratoryId},</if>
+            <if test="logiLabTime != null">logi_lab_time = #{logiLabTime},</if>
+        </trim>
+        where logi_id = #{logiId}
+    </update>
+
+    <delete id="deleteNaLogisticsByLogiId" parameterType="Long">
+        delete from na_logistics where logi_id = #{logiId}
+    </delete>
+
+    <delete id="deleteNaLogisticsByLogiIds" parameterType="String">
+        delete from na_logistics where logi_id in 
+        <foreach item="logiId" collection="array" open="(" separator="," close=")">
+            #{logiId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteNucleicAcidByNaIds" parameterType="String">
+        delete from nucleic_acid where na_id in 
+        <foreach item="naId" collection="array" open="(" separator="," close=")">
+            #{naId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteNucleicAcidByNaId" parameterType="Long">
+        delete from nucleic_acid where na_id = #{naId}
+    </delete>
+
+    <insert id="batchNucleicAcid">
+        insert into nucleic_acid( na_id, na_time, na_mix_type, na_type, tube_id, point_id, point_name, na_result, na_result_time, logi_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.naId}, #{item.naTime}, #{item.naMixType}, #{item.naType}, #{item.tubeId}, #{item.pointId}, #{item.pointName}, #{item.naResult}, #{item.naResultTime}, #{item.logiId})
+        </foreach>
+    </insert>
+
+</mapper>

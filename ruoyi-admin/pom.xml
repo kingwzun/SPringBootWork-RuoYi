@@ -95,6 +95,11 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-point</artifactId>
         </dependency>
+        <!-- 物流模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-logistics</artifactId>
+        </dependency>
 </dependencies>
     <build>
         <plugins>
