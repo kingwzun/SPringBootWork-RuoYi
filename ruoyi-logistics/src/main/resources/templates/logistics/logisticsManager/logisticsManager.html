@@ -40,6 +40,9 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary btn-lg"  onclick="selectArr()" shiro:hasPermission="logistics:logisticsManager:add">
+                    <i class="fa fa-info-circle"></i>快速创建物流
+                </a>
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="logistics:logisticsManager:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
@@ -117,6 +120,13 @@
             };
             $.table.init(options);
         });
+
+
+        /* 选择任务安排 */
+        function selectArr() {
+            var url = prefix + '/authArr';
+            $.modal.open("选择任务模板", url);
+        }
     </script>
 </body>
 </html>

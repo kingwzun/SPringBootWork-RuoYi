@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-	<th:block th:include="include :: header('分配角色选择用户')" />
+	<th:block th:include="include :: header('选择任务')" />
 </head>
 
 <body class="gray-bg">
@@ -9,7 +9,6 @@
 	<div class="row">
 		<div class="col-sm-12 search-collapse">
 			<form id="post-form">
-				<input type="hidden" id="arrId" name="arrId" th:value="${arrId}">
 				<div class="select-list">
 					<ul>
 						<li>
@@ -35,17 +34,17 @@
 <th:block th:include="include :: footer" />
 <script th:inline="javascript">
 	var datas = [[${@dict.getType('sys_normal_disable')}]];
-	var prefix = ctx + "arrangement/arrangementManager/authDelivery"
+	var prefix = ctx + "logistics/logisticsManager"
 
 
 
 	$(function() {
 		var options = {
-			url: prefix + "/deliveryList",
+			url: prefix + "/arrList",
 			queryParams: queryParams,
 			// onClick : zOnClick,
-			sortName: "createTime",
-			sortOrder: "desc",
+			// sortName: "createTime",
+			// sortOrder: "desc",
 			showSearch: false,
 			showRefresh: false,
 			showToggle: false,
@@ -57,39 +56,25 @@
 				checkbox: true
 			},
 				{
-					field: 'userId',
-					title: '用户ID',
+					field: 'arrId',
+					title: '任务ID',
 					visible: false
 				},
 				{
-					field: 'loginName',
-					title: '登录名称',
-					sortable: true
+					field: 'arrTime',
+					title: '检测时间'
 				},
 				{
-					field: 'userName',
-					title: '用户名称'
+					field: 'arrAddress',
+					title: '检测区域'
 				},
 				{
-					field: 'email',
-					title: '邮箱'
+					field: 'pointName',
+					title: '检测点'
 				},
 				{
-					field: 'phonenumber',
-					title: '手机'
-				},
-				{
-					field: 'status',
-					title: '用户状态',
-					align: 'center',
-					formatter: function (value, row, index) {
-						return $.table.selectDictLabel(datas, value);
-					}
-				},
-				{
-					field: 'createTime',
-					title: '创建时间',
-					sortable: true
+					field: 'laboratoryName',
+					title: '实验室'
 				}]
 		};
 		$.table.init(options);
@@ -101,72 +86,26 @@
 		return search;
 	}
 
-	// /* 添加用户-选择用户-提交(子页面调用父页面形式) */
-	// function zOnClick(index, layero) {
-	// 	// var rows = $.table.selectFirstColumns();
-	// 	if (rows.length == 0) {
-	// 		$.modal.alertWarning("请至少选择一条记录");
-	// 		return;
-	// 	}
-	// 	$("#deliveryId").val("deliveryId");
-	// 	$("#deliveryName").val("deliveryName");
-	// 	console.log("3434")
-	// 	$.modal.close();
-	// }
-
-
-	/* 方法2添加用户-选择用户-提交(回调形式-父页面调用子页面) */
-	function getSelections() {
-		// console.log("3434")
-		return selectFirstColumns();
-	}
-	function getDeliveryName() {
-		// console.log("3434")
-		return selectNameColumns();
-	}
-	//
-	// $("#bootstrap-table").on("check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table"
-	// 		, function (e, rowsAfter, rowsBefore) {
-	// 			var rows = $.common.equals("uncheck-all", e.type) ? rowsBefore : rowsAfter;
-	// 			var rowIds = $.table.affectedRowIds(rows);
-	// 			console.log("3434")
-	// 			$("#rowIds").val("rowIds");
-	// 		});
-
-
-
-	// 查询表格首列值deDuplication（ true去重、false不去重）
-	function selectFirstColumns(deDuplication) {
-		var distinct = $.common.isEmpty(deDuplication) ? true : deDuplication;
-		var rows = $.map($("#" + table.options.id).bootstrapTable('getSelections'), function (row) {
-			return $.common.getItemField(row, table.options.columns[1].field);
-		});
-		if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
-			var selectedRows = table.rememberSelecteds[table.options.id];
-			if ($.common.isNotEmpty(selectedRows)) {
-				rows = $.map(selectedRows, function (row) {
-					return $.common.getItemField(row, table.options.columns[1].field);
-				});
-			}
+	/* 根据选择的任务，生成物流信息 */
+	function submitHandler() {
+		var rows = $.table.selectFirstColumns();
+		console.log(rows)
+		if (rows.length == 0) {
+			$.modal.alertWarning("请至少选择一条记录");
+			return;
+		};
+		if (rows.length > 1) {
+			$.modal.alertWarning("请只选择一条记录");
+			return;
 		}
-		return distinct ? $.common.uniqueFn(rows) : rows;
-	}
+		var data = {
+			"arrId": rows.join()
+		};
 
-	// 查询表格UserName列
-	function selectNameColumns(deDuplication) {
-		var distinct = $.common.isEmpty(deDuplication) ? true : deDuplication;
-		var rows = $.map($("#" + table.options.id).bootstrapTable('getSelections'), function (row) {
-			return $.common.getItemField(row, table.options.columns[3].field);
-		});
-		if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
-			var selectedRows = table.rememberSelecteds[table.options.id];
-			if ($.common.isNotEmpty(selectedRows)) {
-				rows = $.map(selectedRows, function (row) {
-					return $.common.getItemField(row, table.options.columns[3].field);
-				});
-			}
-		}
-		return distinct ? $.common.uniqueFn(rows) : rows;
+		var url = prefix + '/addLogisticsByArr/'+data.arrId;
+		$.modal.open("生成的物流信息", url);
+		$.modal.close();
+
 	}
 </script>
 </body>

@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('新增物流信息')" />
+    <th:block th:include="include :: header('修改物流信息')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-logisticsManager-add">
+        <form class="form-horizontal m" id="form-logisticsManager-edit" th:object="${naLogistics}">
+            <h4 class="form-header h4">物流信息信息</h4>
+<!--            <input name="logiId" th:field="*{logiId}" type="hidden">-->
             <div class="form-group">    
                 <label class="col-sm-3 control-label">物流人员ID：</label>
                 <div class="col-sm-8">
-                    <input name="deliveryId" class="form-control" type="text">
+                    <input name="deliveryId" th:field="*{deliveryId}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">检测点ID：</label>
                 <div class="col-sm-8">
-                    <input name="pointId" class="form-control" type="text">
+                    <input name="pointId" th:field="*{pointId}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">检测点交接时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <input name="logiPointTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="logiPointTime" th:value="${#dates.format(naLogistics.logiPointTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
@@ -31,14 +33,14 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">实验室ID：</label>
                 <div class="col-sm-8">
-                    <input name="laboratoryId" class="form-control" type="text">
+                    <input name="laboratoryId" th:field="*{laboratoryId}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">实验室交接时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <input name="logiLabTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="logiLabTime" th:value="${#dates.format(naLogistics.logiLabTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
@@ -58,17 +60,17 @@
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script th:inline="javascript">
-        var prefix = ctx + "logistics/logisticsManager"
+        var prefix = ctx + "logistics/logisticsManager";
         var naMixTypeDatas = [[${@dict.getType('na_mix_type')}]];
         var naTypeDatas = [[${@dict.getType('na_type')}]];
         var naResultDatas = [[${@dict.getType('na_result_type')}]];
-        $("#form-logisticsManager-add").validate({
+        $("#form-logisticsManager-edit").validate({
             focusCleanup: true
         });
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-logisticsManager-add').serialize());
+                $.operate.save(prefix + "/add", $('#form-logisticsManager-edit').serialize());
             }
         }
 
@@ -113,6 +115,7 @@
                         return html;
                     }
                 },
+
                 {
                     field: 'naMixType',
                     align: 'center',
@@ -140,6 +143,7 @@
                         return html;
                     }
                 },
+
                 {
                     field: 'pointId',
                     align: 'center',
@@ -149,6 +153,7 @@
                         return html;
                     }
                 },
+
                 {
                     field: 'pointName',
                     align: 'center',
@@ -158,6 +163,7 @@
                         return html;
                     }
                 },
+
                 {
                     field: 'naResult',
                     align: 'center',
@@ -176,6 +182,7 @@
                         return html;
                     }
                 },
+
                 {
                     field: 'logiId',
                     align: 'center',
@@ -185,6 +192,7 @@
                         return html;
                     }
                 },
+
                 {
                     title: '操作',
                     align: 'center',

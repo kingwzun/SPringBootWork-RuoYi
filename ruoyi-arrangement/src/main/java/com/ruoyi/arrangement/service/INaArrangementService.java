@@ -20,7 +20,13 @@ public interface INaArrangementService
      * @return 任务安排
      */
     public NaArrangement selectNaArrangementByArrId(Long arrId);
-
+    /**
+     * 查询任务安排
+     *
+     * @param arrId 任务安排主键
+     * @return 任务安排
+     */
+    public NaArrangementVO selectNaArrangementVOByArrId(Long arrId);
     /**
      * 查询任务安排列表
      * 

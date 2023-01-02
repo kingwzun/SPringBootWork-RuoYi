@@ -168,21 +168,6 @@ public class NaArrangementController extends BaseController
         return toAjax(naArrangementService.deleteNaArrangementByArrIds(ids));
     }
 
-//    /**
-//     * 打开到医生分配信息页面
-//     */
-//    @RequiresPermissions("arrangement:arrangementManager:authUser")
-//    @GetMapping("/listColumn/{arrId}")
-//    public String detail(@PathVariable("arrId") Long arrId, ModelMap mmap)
-//    {
-//        System.out.println("NaArrangementController.detail");
-//
-//        mmap.put("arrId",arrId);
-//        List<SysUser> medicals = arrMedicalService.selectMedicalsByArrId(arrId);
-//        mmap.put("medicals",medicals);
-//
-//        return prefix+"/detail";
-//    }
     /**
      * 分配用户
      */
@@ -296,23 +281,6 @@ public class NaArrangementController extends BaseController
         List<SysUser> list = arrMedicalService.selectDeliveryList();
         return getDataTable(list);
     }
-
-//    /**
-//     *
-//     */
-//    @RequiresPermissions("system:post:edit")
-//    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-//    @PostMapping("/authDelivery/saveDelivery")
-//    @ResponseBody
-//    public AjaxResult saveDelivery(String deliveryId, String deliveryName,ModelMap mmap)
-//    {
-//        System.out.println("NaArrangementController.saveDelivery "+deliveryId+" "+deliveryName);
-//
-//        mmap.put("deliveryId",deliveryId);
-//        mmap.put("deliveryName",deliveryName);
-//        return  toAjax(1);
-//    }
-//
     /**
      * 角色状态修改
      */

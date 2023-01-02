@@ -50,7 +50,37 @@ public class NaArrangementServiceImpl implements INaArrangementService
     {
         return naArrangementMapper.selectNaArrangementByArrId(arrId);
     }
+    /**
+     * 查询任务安排
+     *
+     * @param arrId 任务安排主键
+     * @return 任务安排
+     */
+    @Override
+    public NaArrangementVO selectNaArrangementVOByArrId(Long arrId)
+    {
+        NaArrangementVO naArrangementVO = new NaArrangementVO();
+        NaArrangement arr = naArrangementMapper.selectNaArrangementByArrId(arrId);
 
+        naArrangementVO.setArrId(arr.getArrId());
+        naArrangementVO.setArrStatus(arr.getArrStatus());
+        naArrangementVO.setArrAddress(arr.getArrAddress());
+        naArrangementVO.setArrTime(arr.getArrTime());
+
+        SysUser sysUser = userService.selectUserById(arr.getDeliveryId());
+        if (sysUser==null) naArrangementVO.setDeliveryName("未查询到物流人员");
+        else naArrangementVO.setDeliveryName(sysUser.getUserName());
+
+        NaLaboratory laboratory = laboratoryService.selectNaLaboratoryByLabId(arr.getLaboratoryId());
+        if(laboratory==null) naArrangementVO.setLaboratoryName("未查询到实验室");
+        else naArrangementVO.setLaboratoryName(laboratory.getLabName());
+
+        NaPoint point = pointService.selectNaPointByPointId(arr.getPointId());
+        if (point==null) naArrangementVO.setPointName("未查询到检测点");
+        else  naArrangementVO.setPointName(point.getPointName());
+
+        return naArrangementVO;
+    }
     /**
      * 查询任务安排列表
      * 
@@ -81,9 +111,7 @@ public class NaArrangementServiceImpl implements INaArrangementService
                 naArrangementVO.setArrTime(arr.getArrTime());
 
 
-
                 SysUser sysUser = userService.selectUserById(arr.getDeliveryId());
-//                System.out.println(sysUser+" f "+naArrangement.getDeliveryId()+" f "+userService.selectUserById(new Long(104) )+"f");
                 if (sysUser==null) naArrangementVO.setDeliveryName("未查询到物流人员");
                 else naArrangementVO.setDeliveryName(sysUser.getUserName());
 

@@ -58,4 +58,12 @@ public interface INaLogisticsService
      * @return 结果
      */
     public int deleteNaLogisticsByLogiId(Long logiId);
+    /**
+     * 根据任务，生成物流信息
+     *
+     *
+     * @param arrId 任务信息主键
+     * @return 结果
+     */
+    NaLogistics generateLogisticsByArrId(Long arrId);
 }

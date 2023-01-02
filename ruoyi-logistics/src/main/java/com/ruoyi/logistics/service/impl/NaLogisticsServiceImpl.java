@@ -1,6 +1,10 @@
 package com.ruoyi.logistics.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.arrangement.domain.NaArrangement;
+import com.ruoyi.arrangement.domain.vo.NaArrangementVO;
+import com.ruoyi.arrangement.service.INaArrangementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -23,7 +27,8 @@ public class NaLogisticsServiceImpl implements INaLogisticsService
 {
     @Autowired
     private NaLogisticsMapper naLogisticsMapper;
-
+    @Autowired
+    private INaArrangementService naArrangementService;
     /**
      * 查询物流信息
      * 
@@ -104,6 +109,25 @@ public class NaLogisticsServiceImpl implements INaLogisticsService
     {
         naLogisticsMapper.deleteNucleicAcidByNaId(logiId);
         return naLogisticsMapper.deleteNaLogisticsByLogiId(logiId);
+    }
+    /**
+     * 根据任务，生成物流信息
+     *
+     *
+     * @param arrId 任务信息主键
+     * @return 结果
+     */
+    @Override
+    public NaLogistics generateLogisticsByArrId(Long arrId) {
+
+        NaArrangement arr = naArrangementService.selectNaArrangementByArrId(arrId);
+        NaLogistics logistics = new NaLogistics();
+        logistics.setDeliveryId(arr.getDeliveryId());
+        logistics.setLaboratoryId(arr.getLaboratoryId());
+        logistics.setPointId(arr.getPointId());
+        List<NucleicAcid> list = new ArrayList<NucleicAcid>();
+        logistics.setNucleicAcidList(list);
+        return logistics;
     }
 
     /**

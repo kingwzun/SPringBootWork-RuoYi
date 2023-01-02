@@ -2,7 +2,10 @@ package com.ruoyi.logistics.controller;
 
 import java.util.List;
 
+import com.ruoyi.arrangement.domain.NaArrangement;
+import com.ruoyi.arrangement.domain.vo.NaArrangementVO;
 import com.ruoyi.arrangement.service.INaArrangementService;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -127,4 +130,47 @@ public class NaLogisticsController extends BaseController
     {
         return toAjax(naLogisticsService.deleteNaLogisticsByLogiIds(ids));
     }
+
+    /**
+     * 选择任务安排
+     */
+    @GetMapping("/authArr")
+    public String selectArr(ModelMap mmap)
+    {
+        System.out.println("NaLogisticsController.selectArr");
+
+//        mmap.put("arrId",arrId);
+        return prefix + "/selectArr";
+    }
+
+    /**
+     * 查询任务安排列表
+     */
+    @RequiresPermissions("system:post:list")
+    @PostMapping("/arrList")
+    @ResponseBody
+    public TableDataInfo arrList()
+    {
+        System.out.println("NaLogisticsController.arrList");
+
+        startPage();
+        List<NaArrangementVO> list = naArrangementService.selectNaArrangementVOList(new NaArrangement());
+        return getDataTable(list);
+    }
+
+    /**
+     * 修改物流信息
+     */
+    @RequiresPermissions("logistics:logisticsManager:add")
+    @GetMapping("/addLogisticsByArr/{arrId}")
+    public String addLogisticsByArr(@PathVariable("arrId") Long  arrId,ModelMap mmap)
+    {
+        System.out.println("NaLogisticsController.addLogisticsByArr "+arrId);
+
+        NaLogistics logistics = naLogisticsService.generateLogisticsByArrId(arrId);
+        System.out.println(logistics);
+        mmap.put("naLogistics", logistics);
+        return prefix + "/addByArr";
+    }
+
 }
