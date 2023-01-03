@@ -51,11 +51,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select a.logi_id, a.logi_status, a.delivery_id, a.point_id, a.logi_point_time, a.laboratory_id, a.logi_lab_time,
  b.na_id as sub_na_id, b.na_time as sub_na_time, b.na_mix_type as sub_na_mix_type, b.na_type as sub_na_type, b.tube_id as sub_tube_id, b.point_id as sub_point_id, b.point_name as sub_point_name, b.na_result as sub_na_result, b.na_result_time as sub_na_result_time, b.logi_id as sub_logi_id
         from na_logistics a
-        left join nucleic_acid b on b.na_id = a.logi_id
+        left join nucleic_acid b on b.logi_id = a.logi_id
         where a.logi_id = #{logiId}
     </select>
         
-    <insert id="insertNaLogistics" parameterType="NaLogistics">
+    <insert id="insertNaLogistics" parameterType="NaLogistics" useGeneratedKeys="true" keyProperty="logiId">
         insert into na_logistics
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="logiId != null">logi_id,</if>
@@ -102,14 +102,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
     
     <delete id="deleteNucleicAcidByNaIds" parameterType="String">
-        delete from nucleic_acid where na_id in 
-        <foreach item="naId" collection="array" open="(" separator="," close=")">
-            #{naId}
+        update nucleic_acid set logi_id=null where  logi_id in
+        <foreach item="logiId" collection="array" open="(" separator="," close=")">
+            #{logiId}
         </foreach>
     </delete>
 
     <delete id="deleteNucleicAcidByNaId" parameterType="Long">
-        delete from nucleic_acid where na_id = #{naId}
+        update nucleic_acid set logi_id=null where  logi_id=#{logiId}
     </delete>
 
     <insert id="batchNucleicAcid">

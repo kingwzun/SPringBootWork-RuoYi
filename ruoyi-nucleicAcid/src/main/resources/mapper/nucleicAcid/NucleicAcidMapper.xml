@@ -57,6 +57,13 @@
                  left join na_personnel b on b.na_id = a.na_id
         where a.na_id = #{naId}
     </select>
+    <select id="selectNucleicAcidByTubeId" parameterType="Long" resultMap="NucleicAcidNaPersonnelResult">
+        select a.na_id, a.na_time, a.na_mix_type, a.na_type, a.tube_id, a.point_id, a.point_name, a.na_result, a.na_result_time, a.logi_id,
+               b.na_per_id as sub_na_per_id, b.na_id as sub_na_id, b.user_id as sub_user_id, b.per_identity_type as sub_per_identity_type, b.per_identity as sub_per_identity
+        from nucleic_acid a
+                 left join na_personnel b on b.na_id = a.na_id
+        where a.tube_id = #{tubeId}
+    </select>
 
     <insert id="insertNucleicAcid" parameterType="NucleicAcid">
         insert into nucleic_acid

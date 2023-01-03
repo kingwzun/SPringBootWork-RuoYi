@@ -19,7 +19,13 @@ public interface INucleicAcidService
      * @return 核酸信息
      */
     public NucleicAcid selectNucleicAcidByNaId(Long naId);
-
+    /**
+     * 查询核酸信息
+     *
+     * @param tubeId 试管编号
+     * @return 核酸信息
+     */
+    public NucleicAcid selectNucleicAcidByTubeId(Long tubeId);
     /**
      * 查询核酸信息列表
      *

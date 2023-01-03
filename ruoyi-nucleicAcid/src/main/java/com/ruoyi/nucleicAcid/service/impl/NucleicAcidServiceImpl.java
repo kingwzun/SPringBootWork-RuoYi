@@ -35,7 +35,18 @@ public class NucleicAcidServiceImpl implements INucleicAcidService
     {
         return nucleicAcidMapper.selectNucleicAcidByNaId(naId);
     }
+    /**
+     * 查询核酸信息
+     *
+     * @param tubeId 试管编号
+     * @return 核酸信息
+     */
+    @Override
+    public NucleicAcid selectNucleicAcidByTubeId(Long tubeId)
+    {
 
+        return nucleicAcidMapper.selectNucleicAcidByTubeId(tubeId);
+    }
     /**
      * 查询核酸信息列表
      *

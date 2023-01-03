@@ -9,6 +9,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.laboratory.domain.NaLaboratory;
 import com.ruoyi.laboratory.service.INaLaboratoryService;
 import com.ruoyi.logistics.domain.vo.NaLogisticsVO;
+import com.ruoyi.nucleicAcid.service.INucleicAcidService;
 import com.ruoyi.point.domain.NaPoint;
 import com.ruoyi.point.service.INaPointService;
 import com.ruoyi.system.service.ISysPostService;
@@ -45,6 +46,8 @@ public class NaLogisticsServiceImpl implements INaLogisticsService
     private INaPointService pointService;
     @Autowired
     private ISysUserService userService;
+    @Autowired
+    private INucleicAcidService nucleicAcidService;
     /**
      * 查询物流信息
      * 
@@ -113,7 +116,9 @@ public class NaLogisticsServiceImpl implements INaLogisticsService
     @Override
     public int insertNaLogistics(NaLogistics naLogistics)
     {
+        System.out.println("NaLogisticsServiceImpl.insertNaLogistics");
         int rows = naLogisticsMapper.insertNaLogistics(naLogistics);
+        
         insertNucleicAcid(naLogistics);
         return rows;
     }
@@ -187,19 +192,17 @@ public class NaLogisticsServiceImpl implements INaLogisticsService
      */
     public void insertNucleicAcid(NaLogistics naLogistics)
     {
+        System.out.println("NaLogisticsServiceImpl.insertNucleicAcid");
         List<NucleicAcid> nucleicAcidList = naLogistics.getNucleicAcidList();
         Long logiId = naLogistics.getLogiId();
         if (StringUtils.isNotNull(nucleicAcidList))
         {
-            List<NucleicAcid> list = new ArrayList<NucleicAcid>();
+//            List<NucleicAcid> list = new ArrayList<NucleicAcid>();
             for (NucleicAcid nucleicAcid : nucleicAcidList)
             {
-                nucleicAcid.setNaId(logiId);
-                list.add(nucleicAcid);
-            }
-            if (list.size() > 0)
-            {
-                naLogisticsMapper.batchNucleicAcid(list);
+                nucleicAcid.setLogiId(logiId);
+                System.out.println(nucleicAcid);
+                nucleicAcidService.updateNucleicAcid(nucleicAcid);
             }
         }
     }

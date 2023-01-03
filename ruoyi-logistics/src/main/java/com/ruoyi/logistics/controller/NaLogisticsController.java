@@ -1,5 +1,6 @@
 package com.ruoyi.logistics.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ruoyi.arrangement.domain.NaArrangement;
@@ -9,6 +10,8 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.laboratory.domain.NaLaboratory;
 import com.ruoyi.laboratory.service.INaLaboratoryService;
 import com.ruoyi.logistics.domain.vo.NaLogisticsVO;
+import com.ruoyi.nucleicAcid.domain.NaPersonnel;
+import com.ruoyi.nucleicAcid.service.INucleicAcidService;
 import com.ruoyi.point.domain.NaPoint;
 import com.ruoyi.point.service.INaPointService;
 import com.ruoyi.system.service.ISysUserService;
@@ -52,6 +55,8 @@ public class NaLogisticsController extends BaseController
     private INaPointService pointService;
     @Autowired
     private ISysUserService userService;
+    @Autowired
+    private INucleicAcidService nucleicAcidService;
     @RequiresPermissions("logistics:logisticsManager:view")
     @GetMapping()
     public String logisticsManager()
@@ -96,6 +101,7 @@ public class NaLogisticsController extends BaseController
         mmap.put("deliveryId",getSysUser().getUserId());
         mmap.put("laboratories",laboratoryService.selectNaLaboratoryList(new NaLaboratory()));
         mmap.put("points", pointService.selectNaPointList(new NaPoint()));
+
         return prefix + "/add";
     }
 
@@ -108,6 +114,19 @@ public class NaLogisticsController extends BaseController
     @ResponseBody
     public AjaxResult addSave(NaLogistics naLogistics)
     {
+        System.out.println("NaLogisticsController.addSave");
+        List<NucleicAcid> list =new ArrayList<>();
+        List<NucleicAcid> nucleicAcidList = naLogistics.getNucleicAcidList();
+        if(nucleicAcidList!=null){
+            for (NucleicAcid acid : nucleicAcidList) {
+                NucleicAcid nucleicAcid = nucleicAcidService.selectNucleicAcidByTubeId(acid.getTubeId());
+                if (nucleicAcid==null){
+                    return error("新增试管" + acid.getTubeId() + "'失败，因为试管未使用");
+                }
+                list.add(nucleicAcid);
+            }
+        }
+        naLogistics.setNucleicAcidList(list);
         return toAjax(naLogisticsService.insertNaLogistics(naLogistics));
     }
 
@@ -136,6 +155,19 @@ public class NaLogisticsController extends BaseController
     @ResponseBody
     public AjaxResult editSave(NaLogistics naLogistics)
     {
+
+        List<NucleicAcid> nucleicAcidList = naLogistics.getNucleicAcidList();
+        List<NucleicAcid> list =new ArrayList<>();
+        if(nucleicAcidList!=null){
+            for (NucleicAcid acid : nucleicAcidList) {
+                NucleicAcid nucleicAcid = nucleicAcidService.selectNucleicAcidByTubeId(acid.getTubeId());
+                if (nucleicAcid==null){
+                    return error("新增试管" + acid.getTubeId() + "'失败，因为试管未使用");
+                }
+                list.add(nucleicAcid);
+            }
+        }
+        naLogistics.setNucleicAcidList(list);
         return toAjax(naLogisticsService.updateNaLogistics(naLogistics));
     }
 
@@ -196,5 +228,6 @@ public class NaLogisticsController extends BaseController
 
         return prefix + "/addByArr";
     }
+
 
 }

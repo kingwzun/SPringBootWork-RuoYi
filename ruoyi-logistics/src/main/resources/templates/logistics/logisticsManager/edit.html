@@ -109,34 +109,8 @@
                     	return columnIndex + $.table.serialNumber(index);
                     }
                 },
-                {
-                    field: 'naTime',
-                    align: 'center',
-                    title: '核酸时间',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].naTime' value='%s'>", index, value);
-                        return html;
-                    }
-                },
 
-                {
-                    field: 'naMixType',
-                    align: 'center',
-                    title: '混样方式(0混管，1单管)',
-                    formatter: function(value, row, index) {
-                        var name = $.common.sprintf("nucleicAcidList[%s].naMixType", index);
-                        return $.common.dictToSelect(naMixTypeDatas, value, name);
-                    }
-                },
-                {
-                    field: 'naType',
-                    align: 'center',
-                    title: '核酸类型',
-                    formatter: function(value, row, index) {
-                        var name = $.common.sprintf("nucleicAcidList[%s].naType", index);
-                        return $.common.dictToSelect(naTypeDatas, value, name);
-                    }
-                },
+
                 {
                     field: 'tubeId',
                     align: 'center',
@@ -146,56 +120,6 @@
                         return html;
                     }
                 },
-
-                {
-                    field: 'pointId',
-                    align: 'center',
-                    title: '检测点ID',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].pointId' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-
-                {
-                    field: 'pointName',
-                    align: 'center',
-                    title: '检测点名称',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].pointName' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-
-                {
-                    field: 'naResult',
-                    align: 'center',
-                    title: '核酸结果(0未录入，1阴性，2阳性)',
-                    formatter: function(value, row, index) {
-                        var name = $.common.sprintf("nucleicAcidList[%s].naResult", index);
-                        return $.common.dictToSelect(naResultDatas, value, name);
-                    }
-                },
-                {
-                    field: 'naResultTime',
-                    align: 'center',
-                    title: '结果最后一次修改时间',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].naResultTime' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-
-                {
-                    field: 'logiId',
-                    align: 'center',
-                    title: '物流信息ID',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].logiId' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-
                 {
                     title: '操作',
                     align: 'center',
