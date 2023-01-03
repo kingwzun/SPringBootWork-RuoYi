@@ -6,6 +6,12 @@ import com.ruoyi.arrangement.domain.NaArrangement;
 import com.ruoyi.arrangement.domain.vo.NaArrangementVO;
 import com.ruoyi.arrangement.service.INaArrangementService;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.laboratory.domain.NaLaboratory;
+import com.ruoyi.laboratory.service.INaLaboratoryService;
+import com.ruoyi.logistics.domain.vo.NaLogisticsVO;
+import com.ruoyi.point.domain.NaPoint;
+import com.ruoyi.point.service.INaPointService;
+import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +46,12 @@ public class NaLogisticsController extends BaseController
     private INaLogisticsService naLogisticsService;
     @Autowired
     private INaArrangementService naArrangementService;
+    @Autowired
+    private INaLaboratoryService laboratoryService;
+    @Autowired
+    private INaPointService pointService;
+    @Autowired
+    private ISysUserService userService;
     @RequiresPermissions("logistics:logisticsManager:view")
     @GetMapping()
     public String logisticsManager()
@@ -56,7 +68,8 @@ public class NaLogisticsController extends BaseController
     public TableDataInfo list(NaLogistics naLogistics)
     {
         startPage();
-        List<NaLogistics> list = naLogisticsService.selectNaLogisticsList(naLogistics);
+
+        List<NaLogisticsVO> list = naLogisticsService.selectNaLogisticsVOList(naLogistics);
         return getDataTable(list);
     }
 
@@ -78,8 +91,11 @@ public class NaLogisticsController extends BaseController
      * 新增物流信息
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
+        mmap.put("deliveryId",getSysUser().getUserId());
+        mmap.put("laboratories",laboratoryService.selectNaLaboratoryList(new NaLaboratory()));
+        mmap.put("points", pointService.selectNaPointList(new NaPoint()));
         return prefix + "/add";
     }
 
@@ -104,6 +120,10 @@ public class NaLogisticsController extends BaseController
     {
         NaLogistics naLogistics = naLogisticsService.selectNaLogisticsByLogiId(logiId);
         mmap.put("naLogistics", naLogistics);
+
+        mmap.put("laboratories",laboratoryService.selectNaLaboratoryList(new NaLaboratory()));
+        mmap.put("points", pointService.selectNaPointList(new NaPoint()));
+
         return prefix + "/edit";
     }
 
@@ -159,7 +179,7 @@ public class NaLogisticsController extends BaseController
     }
 
     /**
-     * 修改物流信息
+     * 自动生成物流信息
      */
     @RequiresPermissions("logistics:logisticsManager:add")
     @GetMapping("/addLogisticsByArr/{arrId}")
@@ -168,8 +188,12 @@ public class NaLogisticsController extends BaseController
         System.out.println("NaLogisticsController.addLogisticsByArr "+arrId);
 
         NaLogistics logistics = naLogisticsService.generateLogisticsByArrId(arrId);
-        System.out.println(logistics);
         mmap.put("naLogistics", logistics);
+
+        mmap.put("deliveryName",getSysUser().getUserName());
+        mmap.put("laboratories",laboratoryService.selectNaLaboratoryList(new NaLaboratory()));
+        mmap.put("points", pointService.selectNaPointList(new NaPoint()));
+
         return prefix + "/addByArr";
     }
 

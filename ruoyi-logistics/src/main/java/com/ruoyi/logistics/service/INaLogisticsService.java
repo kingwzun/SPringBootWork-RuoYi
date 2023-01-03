@@ -2,6 +2,7 @@ package com.ruoyi.logistics.service;
 
 import java.util.List;
 import com.ruoyi.logistics.domain.NaLogistics;
+import com.ruoyi.logistics.domain.vo.NaLogisticsVO;
 
 /**
  * 物流信息Service接口
@@ -26,7 +27,13 @@ public interface INaLogisticsService
      * @return 物流信息集合
      */
     public List<NaLogistics> selectNaLogisticsList(NaLogistics naLogistics);
-
+    /**
+     * 查询物流信息列表
+     *
+     * @param naLogistics 物流信息
+     * @return 物流信息集合
+     */
+    public List<NaLogisticsVO> selectNaLogisticsVOList(NaLogistics naLogistics);
     /**
      * 新增物流信息
      * 

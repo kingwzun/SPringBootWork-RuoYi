@@ -136,7 +136,6 @@ public class NaArrangementController extends BaseController
             deliveryName=sysUser.getUserName();
         }
 
-
         mmap.put("deliveryName",deliveryName);
         mmap.put("laboratories",laboratoryService.selectNaLaboratoryList(new NaLaboratory()));
         mmap.put("points", pointService.selectNaPointList(new NaPoint()));

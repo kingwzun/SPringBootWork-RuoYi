@@ -7,42 +7,27 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-logisticsManager-add">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">物流人员ID：</label>
+            <input name="deliveryId" th:value="${deliveryId}" class="form-control" type="hidden">
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">检测点：</label>
                 <div class="col-sm-8">
-                    <input name="deliveryId" class="form-control" type="text">
+                    <select name="pointId" id="pointId" class="form-control" >
+                        <option th:each="point:${points}" th:value="${point.pointId}" th:text="${point.pointName}" th:disabled="${point.status == '1'}"></option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">检测点ID：</label>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">实验室：</label>
                 <div class="col-sm-8">
-                    <input name="pointId" class="form-control" type="text">
+                    <select name="laboratoryId" id="laboratoryId" class="form-control" >
+                        <option  th:each="lab:${laboratories}" th:value="${lab.labId}" th:text="${lab.labName}" ></option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">检测点交接时间：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="logiPointTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">实验室ID：</label>
-                <div class="col-sm-8">
-                    <input name="laboratoryId" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">实验室交接时间：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="logiLabTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
-                </div>
-            </div>
+
             <h4 class="form-header h4">核酸信息信息</h4>
             <div class="row">
                 <div class="col-sm-12">
@@ -105,83 +90,11 @@
                     }
                 },
                 {
-                    field: 'naTime',
-                    align: 'center',
-                    title: '核酸时间',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].naTime' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-                {
-                    field: 'naMixType',
-                    align: 'center',
-                    title: '混样方式(0混管，1单管)',
-                    formatter: function(value, row, index) {
-                        var name = $.common.sprintf("nucleicAcidList[%s].naMixType", index);
-                        return $.common.dictToSelect(naMixTypeDatas, value, name);
-                    }
-                },
-                {
-                    field: 'naType',
-                    align: 'center',
-                    title: '核酸类型',
-                    formatter: function(value, row, index) {
-                        var name = $.common.sprintf("nucleicAcidList[%s].naType", index);
-                        return $.common.dictToSelect(naTypeDatas, value, name);
-                    }
-                },
-                {
                     field: 'tubeId',
                     align: 'center',
                     title: '试管编号',
                     formatter: function(value, row, index) {
                         var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].tubeId' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-                {
-                    field: 'pointId',
-                    align: 'center',
-                    title: '检测点ID',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].pointId' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-                {
-                    field: 'pointName',
-                    align: 'center',
-                    title: '检测点名称',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].pointName' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-                {
-                    field: 'naResult',
-                    align: 'center',
-                    title: '核酸结果(0未录入，1阴性，2阳性)',
-                    formatter: function(value, row, index) {
-                        var name = $.common.sprintf("nucleicAcidList[%s].naResult", index);
-                        return $.common.dictToSelect(naResultDatas, value, name);
-                    }
-                },
-                {
-                    field: 'naResultTime',
-                    align: 'center',
-                    title: '结果最后一次修改时间',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].naResultTime' value='%s'>", index, value);
-                        return html;
-                    }
-                },
-                {
-                    field: 'logiId',
-                    align: 'center',
-                    title: '物流信息ID',
-                    formatter: function(value, row, index) {
-                        var html = $.common.sprintf("<input class='form-control' type='text' name='nucleicAcidList[%s].logiId' value='%s'>", index, value);
                         return html;
                     }
                 },
@@ -201,15 +114,7 @@
             var count = $("#" + table.options.id).bootstrapTable('getData').length;
             var row = {
                 index: $.table.serialNumber(count),
-                naTime: "",
-                naMixType: "",
-                naType: "",
                 tubeId: "",
-                pointId: "",
-                pointName: "",
-                naResult: "",
-                naResultTime: "",
-                logiId: "",
             }
             sub.addRow(row);
         }
