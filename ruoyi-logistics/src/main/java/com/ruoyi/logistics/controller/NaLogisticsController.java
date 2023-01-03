@@ -1,6 +1,7 @@
 package com.ruoyi.logistics.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.arrangement.domain.NaArrangement;
@@ -229,5 +230,42 @@ public class NaLogisticsController extends BaseController
         return prefix + "/addByArr";
     }
 
+    /**
+     * 送达检测点
+     */
+    @RequiresPermissions("logistics:logisticsManager:edit")
+    @Log(title = "物流信息", businessType = BusinessType.UPDATE)
+    @GetMapping("/deliveredPoint/{logiId}")
+    @ResponseBody
+    public AjaxResult deliveredPoint(@PathVariable("logiId") Long  logiId)
+    {
 
+        NaLogistics naLogistics = naLogisticsService.selectNaLogisticsByLogiId(logiId);
+        if(naLogistics.getLogiPointTime()!=null){
+            return toAjax(0);
+        }
+        Date date = new Date();
+        naLogistics.setLogiPointTime(date);
+
+        return toAjax(naLogisticsService.updateNaLogistics(naLogistics));
+    }
+    /**
+     * 送达实验室
+     */
+    @RequiresPermissions("logistics:logisticsManager:edit")
+    @Log(title = "送达实验室", businessType = BusinessType.UPDATE)
+    @GetMapping("/deliveredLab/{logiId}")
+    @ResponseBody
+    public AjaxResult deliveredLab(@PathVariable("logiId") Long  logiId)
+    {
+
+        NaLogistics naLogistics = naLogisticsService.selectNaLogisticsByLogiId(logiId);
+        if(naLogistics.getLogiLabTime()!=null){
+            return toAjax(0);
+        }
+        Date date = new Date();
+        naLogistics.setLogiLabTime(date);
+
+        return toAjax(naLogisticsService.updateNaLogistics(naLogistics));
+    }
 }

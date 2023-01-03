@@ -38,8 +38,8 @@ public class NaLogisticsVO extends BaseEntity
     private String pointName;
 
     /** 检测点交接时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "检测点交接时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "检测点交接时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date logiPointTime;
 
     /** 实验室 */
@@ -47,8 +47,8 @@ public class NaLogisticsVO extends BaseEntity
     private String laboratoryName;
 
     /** 实验室交接时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "实验室交接时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "实验室交接时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date logiLabTime;
 
     /** 核酸信息信息 */
