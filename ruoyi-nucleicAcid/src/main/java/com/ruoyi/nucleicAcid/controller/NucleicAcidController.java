@@ -93,8 +93,9 @@ public class NucleicAcidController extends BaseController {
         SysUser user = getSysUser();
         SysDept sysDept = iSysDeptService.selectDeptById(user.getDeptId());
 
-        mmap.put("deptName", sysDept.getDeptName());
-        mmap.put("deptId", user.getDeptId());
+        
+        mmap.put("pointName", sysDept.getDeptName());
+        mmap.put("pointId", user.getDeptId());
 
         Date date = new Date();
         SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -123,7 +124,6 @@ public class NucleicAcidController extends BaseController {
                 if(user==null){
                     return error("新增人员" + naPersonnel.getPerIdentity() + "'失败，因为用户不存在");
                 }
-                System.out.println(naPersonnel+"   xxxxxxxxxxxxxxxxxxxx");
                 //设置上用户id
                 naPersonnel.setUserId(user.getUserId().toString());
                 naPersonnelList.set(i,naPersonnel);
@@ -133,8 +133,6 @@ public class NucleicAcidController extends BaseController {
         // 取身份信息
         SysUser user = getSysUser();
         SysDept sysDept = iSysDeptService.selectDeptById(user.getDeptId());
-//        nucleicAcid.setDeptId(user.getDeptId());
-//        nucleicAcid.setDeptName(sysDept.getDeptName());
         return toAjax(nucleicAcidService.insertNucleicAcid(nucleicAcid));
     }
 
@@ -191,9 +189,6 @@ public class NucleicAcidController extends BaseController {
     public String editResult(@PathVariable("naId") Long naId, ModelMap mmap) {
         NucleicAcid nucleicAcid = nucleicAcidService.selectNucleicAcidByNaId(naId);
         mmap.put("nucleicAcid", nucleicAcid);
-//        SysDept sysDept = iSysDeptService.selectDeptById(nucleicAcid.getDeptId());
-//        mmap.put("deptName", sysDept.getDeptName());
-
         return prefix + "/editResult";
     }
 

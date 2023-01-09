@@ -103,11 +103,10 @@
                 $.modal.alertWarning("请只选择一条记录");
                 return;
             }
-            // $('#userids').html('我是通过方式二来的：' + rows.join())
+
             console.log(rows)
             console.log(rows.join())
             console.log(deliveryName.join())
-            // $("#deliveryId").html(rows.join());
             $("#deliveryName").val(deliveryName.join());
             $("#deliveryId").val(rows.join());
             $.modal.close(index);

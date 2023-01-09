@@ -101,19 +101,6 @@
 		return search;
 	}
 
-	// /* 添加用户-选择用户-提交(子页面调用父页面形式) */
-	// function zOnClick(index, layero) {
-	// 	// var rows = $.table.selectFirstColumns();
-	// 	if (rows.length == 0) {
-	// 		$.modal.alertWarning("请至少选择一条记录");
-	// 		return;
-	// 	}
-	// 	$("#deliveryId").val("deliveryId");
-	// 	$("#deliveryName").val("deliveryName");
-	// 	console.log("3434")
-	// 	$.modal.close();
-	// }
-
 
 	/* 方法2添加用户-选择用户-提交(回调形式-父页面调用子页面) */
 	function getSelections() {
@@ -124,16 +111,6 @@
 		// console.log("3434")
 		return selectNameColumns();
 	}
-	//
-	// $("#bootstrap-table").on("check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table"
-	// 		, function (e, rowsAfter, rowsBefore) {
-	// 			var rows = $.common.equals("uncheck-all", e.type) ? rowsBefore : rowsAfter;
-	// 			var rowIds = $.table.affectedRowIds(rows);
-	// 			console.log("3434")
-	// 			$("#rowIds").val("rowIds");
-	// 		});
-
-
 
 	// 查询表格首列值deDuplication（ true去重、false不去重）
 	function selectFirstColumns(deDuplication) {

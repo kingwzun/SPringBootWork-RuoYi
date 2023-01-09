@@ -207,7 +207,10 @@ public class NaLogisticsController extends BaseController
         System.out.println("NaLogisticsController.arrList");
 
         startPage();
-        List<NaArrangementVO> list = naArrangementService.selectNaArrangementVOList(new NaArrangement());
+        NaArrangement arrangement = new NaArrangement();
+        arrangement.setArrStatus("0");
+        List<NaArrangementVO> list = naArrangementService.selectNaArrangementVOList(arrangement);
+
         return getDataTable(list);
     }
 
